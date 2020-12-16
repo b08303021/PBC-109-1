@@ -33,7 +33,7 @@ class Boss(tk.Frame):
         self.nameB = tk.Label(self, text=bName, font=fSize1)
         self.nameB.grid(row=0, column=3, sticky=tk.S)
 
-        fSize2 = tkFont.Font(size=12)
+        fSize2 = tkFont.Font(size=14)
         pLevel = 0  # 會隨上場角色更動所以分開寫
         self.level = tk.Label(self, text=("Lv.", pLevel), font=fSize2)  # 角色等級
         self.level.grid(row=0, column=1, sticky=tk.SW)
@@ -76,11 +76,11 @@ class Boss(tk.Frame):
         self.b_miss = tk.Label(self, text=str(bInfo[4]), height=2, font=fSize2, bg='white')
         self.b_miss.grid(row=5, column=3)
 
-        self.btnBack = tk.Button(self, text="back")  # 暫定返回鍵
+        fSize3 = tkFont.Font(size=12)
+        self.btnBack = tk.Button(self, text="BACK", height=2, width=8, font=fSize3)  # 暫定返回鍵
         self.btnBack.grid(row=0, column=0, sticky=tk.NW)
 
-        fSize3 = tkFont.Font(size=13)
-        self.btnFight = tk.Button(self, text="戰  鬥", height=2, width=10, font=fSize3)  # 暫定戰鬥鍵
+        self.btnFight = tk.Button(self, text="戰  鬥", height=2, width=10, font=fSize1)  # 暫定戰鬥鍵
         self.btnFight.grid(row=6, column=1, columnspan=2)
 
 
@@ -88,7 +88,7 @@ boss = Boss()
 boss.master.title("Page_6")  # 暫定標題
 boss.master.minsize(width=800, height=600)
 boss.master.maxsize(width=800, height=600)
-# boss.master.configure(bg='white')
+boss.master.configure(bg='white')
 boss.configure(bg='white')  # 要不要.master呢
 
 boss.mainloop()
