@@ -63,6 +63,7 @@ class ChooseCharacter(tk.Frame):
         self.imageChr10 = ImageTk.PhotoImage(file="C:\\Users\\黃柏誌\\Desktop\\大二上\\PBC\\Chr10.png")
         self.btnChr10 = tk.Button(self, image=self.imageChr10, command=self.clickBtnChr10, height=140, width=148)
 
+        # 設定位置
         self.lblChooseChr.place(x=320, y=35)
         self.btnBack.place(x=10, y=10)
 
@@ -91,11 +92,9 @@ class ChooseCharacter(tk.Frame):
     #  設定按鈕觸發事件
     def clickBtnBack(self):
         pass
-
     def clickBtnChr1(self):
         ### 切換至角色一
         pass
-
     def clickBtnChr2(self):
         """
         if self.haveCharacter2 == True:
@@ -104,31 +103,22 @@ class ChooseCharacter(tk.Frame):
             跳出對話框說:您尚未擁有該角色
         """
         pass
-
     def clickBtnChr3(self):
         pass
-
     def clickBtnChr4(self):
         pass
-
     def clickBtnChr5(self):
         pass
-
     def clickBtnChr6(self):
         pass
-
     def clickBtnChr7(self):
         pass
-
     def clickBtnChr8(self):
         pass
-
     def clickBtnChr9(self):
         pass
-
     def clickBtnChr10(self):
         pass
-
 
 ChooseChr = ChooseCharacter()
 ChooseChr.master.title("選擇角色")
