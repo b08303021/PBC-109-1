@@ -163,7 +163,10 @@ class Boss(tk.Frame):
         self.master.geometry('800x600')
         self.master.minsize(800, 600)
         self.master.maxsize(800, 600)
+        self.background()
         self.createWidgets()
+        self.master.configure(bg='white')
+        self.configure(bg='white')
 
     def background(self):  # 暫定背景圖
         self.imageBG = tk.PhotoImage(file='p6BG.gif')  # 注意檔案路徑
