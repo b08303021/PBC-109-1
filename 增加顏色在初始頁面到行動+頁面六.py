@@ -27,10 +27,13 @@ class StartPage(tk.Frame):
         self.createWidgets()
         self.master.title('我的大學')
         self.master.geometry("800x600")
+        self.master.minsize(800, 600)
+        self.master.maxsize(800, 600)
 
     def usr_login(self):
     # 獲取使用者輸入的usr_name和
         usr_name = self.var_usr_name.get()
+        StartPage.name = usr_name
         yy = tkFont.families()
         if usr_name != '':
             self.destroy()
@@ -46,7 +49,7 @@ class StartPage(tk.Frame):
         self.hit = tk.Label(self, text='(你可以不輸入角色名稱看看)', font=('KaiTi', 20)).pack()
         self.var_usr_name = tk.StringVar()
         self.entry_usr_name = tk.Entry(self, textvariable=self.var_usr_name, font=('KaiTi', 20)).pack(pady=10)
-        self.btn_login = tk.Button(self, text='登入', bg='#A877BA', font=('KaiTi', 20), command=self.usr_login)
+        self.btn_login = tk.Button(self, text='登入', bg='#ffcc69', font=('KaiTi', 20), command=self.usr_login)
         self.btn_login.pack(padx=10, pady=10)
 
 class Game(tk.Frame):
@@ -76,7 +79,9 @@ class Game(tk.Frame):
         self.dodge = tk.Button(self, text = "閃避：34%", height = 1, width = 15, font =f3, anchor='w').place(x = 400, y = 480)
         # 角色名和自己的名稱
         self.charater_name = tk.Label(self, text = "桐人", height = 1, width = 10, bg = 'white', font =f1).place(x = 420 , y = 100)
-        self.name = tk. Label(self, text = "亞斯娜", height = 1, width = 10, bg = 'white', font =f2).place(x = 440 , y = 200)
+        self.name = tk. Label(self, text = StartPage.name, height = 1, width = 10, bg = 'white', font =f2).place(x = 80 , y = 310)
+        self.word = '桐谷和人（桐ヶ谷きりがや 和人かずと，Kirigaya Kazuto），虛擬世界的用戶名為「桐人（キリト，Kirito）」，是日本小說家川原礫輕小說《刀劍神域》及其改編動、漫畫作品的主角。在以《刀劍神域》為主的諸多系列作裡作為主角或重要角色登場。'
+        self.intro = tk.Message(self, text = self.word, font = f4, bg = 'white', width = 270).place(x = 400, y = 150)
         # 按鈕
         self.boss = tk.Button(self, text = "關\n卡", height = 2, width = 2, font = f3, command= self.toBoss).place(x = 760 , y = 60)
         self.character = tk.Button(self, text = "角\n色", height = 2, width = 2, font = f3).place(x = 760 , y = 180)
