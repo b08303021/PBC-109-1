@@ -6,8 +6,13 @@ class Boss(tk.Frame):
     def __init__(self):
         tk.Frame.__init__(self)
         self.grid()
+        self.master.geometry('800x600')
+        self.master.minsize(800, 600)
+        self.master.maxsize(800, 600)
         self.background()
         self.createWidgets()
+        self.master.configure(bg='white')
+        self.configure(bg='white')
 
     def background(self):  # 暫定背景圖
         self.imageBG = tk.PhotoImage(file='p6BG.gif')  # 注意檔案路徑
@@ -85,10 +90,4 @@ class Boss(tk.Frame):
 
 
 boss = Boss()
-boss.master.title("Page_6")  # 暫定標題
-boss.master.minsize(width=800, height=600)
-boss.master.maxsize(width=800, height=600)
-boss.master.configure(bg='white')
-boss.configure(bg='white')  # 要不要.master呢
-
 boss.mainloop()
