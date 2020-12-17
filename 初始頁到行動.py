@@ -110,14 +110,14 @@ class Action(tk.Frame):
         self.output.place(x = 30, y = 300)
         # 按鈕
         self.back = tk.Button(self, text = "返回", height = 1, width = 4, font = f3, anchor='w', command= self.toGame).place(x = 30, y = 30)
-        self.a = tk.Button(self, text = "A", height = 1, width = 10, font = f3, bg='#009960', anchor='w', command=partial(self.actiontext, 'a')).place(x = 35, y = 120)
-        self.b = tk.Button(self, text = "B", height = 1, width = 10, font = f3, bg='#009960', anchor='w', command=partial(self.actiontext,'b')).place(x = 220, y = 120)
-        self.c = tk.Button(self, text = "C", height = 1, width = 10, font = f3, bg='#009960', anchor='w', command=partial(self.actiontext,'c')).place(x = 405, y = 120)
-        self.d = tk.Button(self, text = "D", height = 1, width = 10, font = f3, bg='#009960', anchor='w', command=partial(self.actiontext,'d')).place(x = 590, y = 120)
-        self.e = tk.Button(self, text = "E", height = 1, width = 10, font = f3, bg='#009960', anchor='w', command=partial(self.actiontext,'e')).place(x = 35, y = 220)
-        self.f = tk.Button(self, text = "F", height = 1, width = 10, font = f3, bg='#009960', anchor='w', command=partial(self.actiontext,'f')).place(x = 220, y = 220)
-        self.g = tk.Button(self, text = "G", height = 1, width = 10, font = f3, bg='#009960', anchor='w', command=partial(self.actiontext,'g')).place(x = 405, y = 220)
-        self.h = tk.Button(self, text = "H", height = 1, width = 10, font = f3, bg='#009960', anchor='w', command=partial(self.actiontext,'h')).place(x = 590, y = 220)
+        self.a = tk.Button(self, text = "A", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext, 'a')).place(x = 35, y = 120)
+        self.b = tk.Button(self, text = "B", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'b')).place(x = 220, y = 120)
+        self.c = tk.Button(self, text = "C", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'c')).place(x = 405, y = 120)
+        self.d = tk.Button(self, text = "D", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'d')).place(x = 590, y = 120)
+        self.e = tk.Button(self, text = "E", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'e')).place(x = 35, y = 220)
+        self.f = tk.Button(self, text = "F", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'f')).place(x = 220, y = 220)
+        self.g = tk.Button(self, text = "G", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'g')).place(x = 405, y = 220)
+        self.h = tk.Button(self, text = "H", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'h')).place(x = 590, y = 220)
         # 標題
         self.title = tk.Label(self, text = "行動", height = 1, width = 10, bg = 'white', font = f1).place(x = 600 , y = 25)
         # CD
