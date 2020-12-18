@@ -142,7 +142,7 @@ class Level(tk.Frame):
         self.image9 = ImageTk.PhotoImage(file = "9.jpg")
         self.image10 = ImageTk.PhotoImage(file = "10.jpg")
         
-        self.back = tk.Button(self, text = "返回", width = 3, font = ('KaiTi', 30), command = self.toGame)
+        self.back = tk.Button(self, text = "返回", width = 3, bg='#00FFFF', font = ('KaiTi', 25), command = self.toGame)
         self.btn1 = tk.Button(self, image = self.image1, command = self.check, font = f2, height = 200, width = 150)
         self.btn2 = tk.Button(self, image = self.image2, command = self.check, font = f2, height = 200, width = 150)
         self.btn3 = tk.Button(self, image = self.image3, command = self.check, font = f2, height = 200, width = 150)
@@ -218,7 +218,7 @@ class ChooseCharacter(tk.Frame):
         f = tkFont.Font(size=20, family="Courier New")
         self.background = tk.Canvas(self, height=600, width=800, bg='white').pack()
         #  設定標題及角色名字
-        self.lblChooseChr = tk.Label(self, text="選擇角色", height=1, width=8, bg='white', font=f)
+        self.lblChooseChr = tk.Label(self, text="選擇角色", height=1, width=8, bg='white', font=('KaiTi', 30))
         self.lblChr1 = tk.Label(self, text="  Chr1", height=1, width=7, bg='white', font=f)
         self.lblChr2 = tk.Label(self, text="  Chr2", height=1, width=7, bg='white', font=f)
         self.lblChr3 = tk.Label(self, text="  Chr3", height=1, width=7, bg='white', font=f)
@@ -231,7 +231,7 @@ class ChooseCharacter(tk.Frame):
         self.lblChr10 = tk.Label(self, text="  Chr10", height=1, width=7, bg='white', font=f)
 
         #  建立按鈕
-        self.btnBack = tk.Button(self, text="返回", height=1, width=6, font=('KaiTi', 30), command=self.toGame)
+        self.btnBack = tk.Button(self, text="返回", height=1, width=6, font=('KaiTi', 30), bg='#00FFFF', command=self.toGame)
         self.imageChr1 = ImageTk.PhotoImage(file="Chr1.png")
         self.btnChr1 = tk.Button(self, image=self.imageChr1, command=self.clickBtnChr1, height=140, width=148)
         self.imageChr2 = ImageTk.PhotoImage(file="Chr2.png")
@@ -335,7 +335,7 @@ class Action(tk.Frame):
         self.output = tk.Text(self, width=100, height=15, font = f4)
         self.output.place(x = 30, y = 300)
         # 按鈕
-        self.back = tk.Button(self, text = "返回", height = 1, width = 5, font = ('KaiTi', 30), command= self.toGame).place(x = 10, y = 0)
+        self.back = tk.Button(self, text = "返回", height = 1, width = 5, bg='#00FFFF', font = ('KaiTi', 30), command= self.toGame).place(x = 10, y = 0)
         self.a = tk.Button(self, text = "A", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext, 'a')).place(x = 35, y = 120)
         self.b = tk.Button(self, text = "B", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'b')).place(x = 220, y = 120)
         self.c = tk.Button(self, text = "C", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'c')).place(x = 405, y = 120)
@@ -362,7 +362,7 @@ class Action(tk.Frame):
     def write(self, txt):
         self.output.insert('1.0',str(txt))
         self.update_idletasks()
-    
+
     def cooldown(self, cdnum):
         if cdnum > 0:
             self.cantrigger = False
@@ -457,7 +457,7 @@ class Boss(tk.Frame):
         self.b_miss.grid(row=8, column=3)
 
         fSize3 = tkFont.Font(size=20)
-        self.btnBack = tk.Button(self, text="返回", height=2, width=8, font=fSize3, command=self.toLevel)  # 暫定返回鍵
+        self.btnBack = tk.Button(self, text="返回", height=2, width=8, bg='#00FFFF', font=fSize3, command=self.toLevel)  # 暫定返回鍵
         self.btnBack.grid(row=0, column=0, sticky=tk.NW)
 
         self.btnFight = tk.Button(self, text="戰  鬥", height=1, width=10, font=fSize1, bg='#FF5151', command=self.toFight)  # 暫定戰鬥鍵
@@ -486,12 +486,12 @@ class Fight(tk.Frame):
         self.title.grid(row=0, column=0)
 
         fSize2 = tkFont.Font(size=20, family="Courier New")
-        self.btnEnd = tk.Button(self, text="結束", height=2, width=8, font=fSize2, command=self.toBoss)  # 暫定結束鍵
+        self.btnEnd = tk.Button(self, text="結束", height=2, width=8, bg='#aa1169', font=fSize2, command=self.toLevel)  # 暫定結束鍵
         self.btnEnd.grid(row=1, column=0, sticky=tk.S)
 
-    def toBoss(self):
+    def toLevel(self):
         self.destroy()
-        self.master.switch_frame(Boss)
+        self.master.switch_frame(Level)
 
 
 if __name__ == "__main__":
