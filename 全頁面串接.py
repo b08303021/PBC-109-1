@@ -352,10 +352,10 @@ class Action(tk.Frame):
         self.cd = tk.Label(self, text = "冷卻時間:", height = 1, width = 10, bg = 'white', font = f2).place(x = 200 , y = 32)
         self.cdnumber = tk.Label(self, textvariable=self.text, height = 1, width = 2, bg = 'white', font = f2, fg="red")
         self.cdnumber.place(x = 390 , y = 32)
-        self.cantrigger = True  # 為防止透過切頁重置CD這邊要做調整
+        Action.cantrigger = True  # 為防止透過切頁重置CD這邊要做調整
         
     def actiontext(self, act):
-        if self.cantrigger == True:
+        if Action.cantrigger == True:
             self.write('已成功行動'+ str(act) + '\n')
             self.cooldown(10)
 
@@ -365,13 +365,13 @@ class Action(tk.Frame):
 
     def cooldown(self, cdnum):
         if cdnum > 0:
-            self.cantrigger = False
+            Action.cantrigger = False
             self.text.set(str(cdnum))
             cdnum -= 1
             t = threading.Timer(1, self.cooldown, args = (cdnum,))
             t.start()
         else:
-            self.cantrigger = True
+            Action.cantrigger = True
             self.text.set('')
     
     def toGame(self):
