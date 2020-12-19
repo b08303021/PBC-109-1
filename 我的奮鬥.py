@@ -389,7 +389,7 @@ class Action(tk.Frame):
         self.background = tk.Canvas(self, height = 600, width = 800, bg = 'white').pack()
         # 文字
         self.output = tk.Text(self, width=60, height=14, font = f4, bg='#D3A4FF')
-        self.output.place(x = 30, y = 300)
+        self.output.place(x = 35, y = 300)
         # 按鈕
         self.back = tk.Button(self, text = "返回", height = 1, width = 5, bg='#00E3E3', font = ('KaiTi', 30), command= self.toGame).place(x = 10, y = 0)
         self.a = tk.Button(self, text = "A", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext, 'a')).place(x = 35, y = 120)
