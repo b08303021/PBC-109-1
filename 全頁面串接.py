@@ -8,6 +8,8 @@ from functools import partial
 import threading
 import math
 
+class B():
+    exp = 0
 
 class SampleApp(tk.Tk):
     def __init__(self):
@@ -75,7 +77,7 @@ class Game(tk.Frame):
         self.background = tk.Canvas(self, height = 600, width = 800, bg = 'white').pack()
         self.picture = tk.Canvas(self, height = 240, width = 240, bg = 'blue').place(x = 60, y = 60)
         # 經驗值
-        self.exp = tk.Label(self, text = "經驗：10/100", height = 1, width = 12, bg = 'white', font = f3).place(x = 450, y = 290)
+        self.exp = tk.Label(self, text = (str(B.exp) + '/' + str(100)), height = 1, width = 12, bg = 'white', font = f3).place(x = 450, y = 290)
         # 首頁基礎數值
         self.level = tk.Button(self, text = "等級：12", height = 1, width = 15, bg='#ccdd69', font = f3, anchor='w').place(x = 60, y = 360)
         self.blood = tk.Button(self, text = "血量：231", height = 1, width = 15, bg='#ccdd69', font = f3, anchor='w').place(x = 60, y = 420)
@@ -142,7 +144,7 @@ class Level(tk.Frame):
         self.image9 = ImageTk.PhotoImage(file = "9.jpg")
         self.image10 = ImageTk.PhotoImage(file = "10.jpg")
         
-        self.back = tk.Button(self, text = "返回", width = 3, bg='#00FFFF', font = ('KaiTi', 25), command = self.toGame)
+        self.back = tk.Button(self, text = "返回", width = 3, bg='#00E3E3', bd=1, font = ('KaiTi', 25), command = self.toGame)
         self.btn1 = tk.Button(self, image = self.image1, command = self.check, font = f2, height = 200, width = 150)
         self.btn2 = tk.Button(self, image = self.image2, command = self.check, font = f2, height = 200, width = 150)
         self.btn3 = tk.Button(self, image = self.image3, command = self.check, font = f2, height = 200, width = 150)
@@ -231,7 +233,7 @@ class ChooseCharacter(tk.Frame):
         self.lblChr10 = tk.Label(self, text="  Chr10", height=1, width=7, bg='white', font=f)
 
         #  建立按鈕
-        self.btnBack = tk.Button(self, text="返回", height=1, width=6, font=('KaiTi', 30), bg='#00FFFF', command=self.toGame)
+        self.btnBack = tk.Button(self, text="返回", height=1, width=6, font=('KaiTi', 30), bg='#00E3E3', command=self.toGame)
         self.imageChr1 = ImageTk.PhotoImage(file="Chr1.png")
         self.btnChr1 = tk.Button(self, image=self.imageChr1, command=self.clickBtnChr1, height=140, width=148)
         self.imageChr2 = ImageTk.PhotoImage(file="Chr2.png")
@@ -332,10 +334,10 @@ class Action(tk.Frame):
         # 背景
         self.background = tk.Canvas(self, height = 600, width = 800, bg = 'white').pack()
         # 文字
-        self.output = tk.Text(self, width=100, height=15, font = f4)
+        self.output = tk.Text(self, width=60, height=14, font = f4, bg='#D3A4FF')
         self.output.place(x = 30, y = 300)
         # 按鈕
-        self.back = tk.Button(self, text = "返回", height = 1, width = 5, bg='#00FFFF', font = ('KaiTi', 30), command= self.toGame).place(x = 10, y = 0)
+        self.back = tk.Button(self, text = "返回", height = 1, width = 5, bg='#00E3E3', font = ('KaiTi', 30), command= self.toGame).place(x = 10, y = 0)
         self.a = tk.Button(self, text = "A", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext, 'a')).place(x = 35, y = 120)
         self.b = tk.Button(self, text = "B", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'b')).place(x = 220, y = 120)
         self.c = tk.Button(self, text = "C", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'c')).place(x = 405, y = 120)
@@ -357,7 +359,8 @@ class Action(tk.Frame):
     def actiontext(self, act):
         if Action.cantrigger == True:
             self.write('已成功行動'+ str(act) + '\n')
-            self.cooldown(10)
+            self.cooldown(0)
+            B.exp += 10
 
     def write(self, txt):
         self.output.insert('1.0',str(txt))
@@ -457,7 +460,7 @@ class Boss(tk.Frame):
         self.b_miss.grid(row=8, column=3)
 
         fSize3 = tkFont.Font(size=20)
-        self.btnBack = tk.Button(self, text="返回", height=2, width=8, bg='#00FFFF', font=fSize3, command=self.toLevel)  # 暫定返回鍵
+        self.btnBack = tk.Button(self, text="返回", height=2, width=8, bg='#00E3E3', font=fSize3, command=self.toLevel)  # 暫定返回鍵
         self.btnBack.grid(row=0, column=0, sticky=tk.NW)
 
         self.btnFight = tk.Button(self, text="戰  鬥", height=1, width=10, font=fSize1, bg='#FF5151', command=self.toFight)  # 暫定戰鬥鍵
