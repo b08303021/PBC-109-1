@@ -7,6 +7,37 @@ from PIL import Image, ImageTk
 from functools import partial
 import threading
 import math
+import csv
+
+p_index = 1
+
+with open('test.csv', newline='') as f:
+    reader = csv.reader(f)
+    pData = list(reader)
+
+
+class Chr:
+    def __init__(self, name, words, exp, lv, hp, atk, defend, skill, miss):
+        self.name = name
+        self.words = words
+        self.exp = int(exp)
+        self.lv = int(lv)
+        self.hp = int(hp)
+        self.atk = int(atk)
+        self.defend = int(defend)
+        self.skill = skill
+        self.miss = miss
+
+    def add_exp(self, x):
+        self.exp += x
+
+    maxexp = [100, 100, 100, 100, 100]  # maxexp[x] 為第x等的最大經驗
+
+
+player = []
+for p in pData:
+    player.append(Chr(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8]))
+
 
 def Battle(Player, Fighter):
     text = ''
@@ -22,11 +53,7 @@ def Battle(Player, Fighter):
             text += ('戰鬥結束，' + Player.name + '倒下了\n')
             break
     return text
-        
 
-class B():
-    exp = 0
-    maxexp = [100, 100, 100, 100, 100]  #maxexp[x] 為第x等的最大經驗
 
 class Charaters():
     def __init__(self, name, hp, atk, level, defend, skill, avoid, skilltype):
@@ -128,10 +155,10 @@ class Game(tk.Frame):
         self.background = tk.Canvas(self, height = 600, width = 800, bg = 'white').pack()
         self.picture = tk.Canvas(self, height = 240, width = 240, bg = 'blue').place(x = 60, y = 60)
         # 經驗值
-        if a.level <= len(B.maxexp):
-            self.exp = tk.Label(self, text = (str(B.exp) + '/' + str(B.maxexp[a.level-1])), height = 1, width = 12, bg = 'white', font = f3).place(x = 450, y = 290)
+        if a.level <= len(player[p_index].maxexp):
+            self.exp = tk.Label(self, text = (str(player[p_index].exp) + '/' + str(player[p_index].maxexp[a.level-1])), height = 1, width = 12, bg = 'white', font = f3).place(x = 450, y = 290)
         else:
-            self.exp = tk.Label(self, text = (str(B.exp) + '/' + str(B.maxexp[a.level-2])), height = 1, width = 12, bg = 'white', font = f3).place(x = 450, y = 290)
+            self.exp = tk.Label(self, text = (str(player[p_index].exp) + '/' + str(player[p_index].maxexp[a.level-2])), height = 1, width = 12, bg = 'white', font = f3).place(x = 450, y = 290)
         # 首頁基礎數值
         self.level = tk.Button(self, text = "等級：" + str(a.level), height = 1, width = 15, bg='#ccdd69', font = f3, anchor='w').place(x = 60, y = 360)
         self.blood = tk.Button(self, text = "血量：231", height = 1, width = 15, bg='#ccdd69', font = f3, anchor='w').place(x = 60, y = 420)
@@ -413,14 +440,14 @@ class Action(tk.Frame):
     def actiontext(self, act):
         if Action.cantrigger == True:
             self.cooldown(0)
-            if a.level <= len(B.maxexp):  #處理升等
-                B.exp += 11
-                if B.exp >= B.maxexp[a.level-1]:
+            if a.level <= len(player[p_index].maxexp):  #處理升等
+                player[p_index].exp += 11
+                if player[p_index].exp >= player[p_index].maxexp[a.level-1]:
                     a.level += 1
-                    if a.level <= len(B.maxexp):
-                        B.exp -= 100
+                    if a.level <= len(player[p_index].maxexp):
+                        player[p_index].exp -= 100
                     else:
-                        B.exp = B.maxexp[len(B.maxexp)-1]
+                        player[p_index].exp = player[p_index].maxexp[len(player[p_index].maxexp)-1]
                     a.atk += 10  #未完成
                     self.write('已成功行動'+ str(act) + '獲得' + str(11) + '點經驗並升級為' + str(a.level) + '等\n')
                 else:
@@ -576,17 +603,17 @@ class Fight(tk.Frame):
     def actiontext(self):
         inithp = [Player.hp, Fighter.hp]
         self.write(Battle(Player, Fighter) + '\n')
-        if a.level <= len(B.maxexp):  #處理升等
+        if a.level <= len(player[p_index].maxexp):  #處理升等
             earnedexp = 0
             if Player.hp > 0:
                 earnedexp = 30
-            B.exp += earnedexp
-            if B.exp >= B.maxexp[a.level-1]:
+            player[p_index].exp += earnedexp
+            if player[p_index].exp >= player[p_index].maxexp[a.level-1]:
                 a.level += 1
-                if a.level <= len(B.maxexp):
-                    B.exp -= 100
+                if a.level <= len(player[p_index].maxexp):
+                    player[p_index].exp -= 100
                 else:
-                    B.exp = B.maxexp[len(B.maxexp)-1]
+                    player[p_index].exp = player[p_index].maxexp[len(player[p_index].maxexp)-1]
                 a.atk += 10  #未完成
                 self.write('獲得' + str(earnedexp) + '點經驗並升級為' + str(a.level) + '等')
             else:
