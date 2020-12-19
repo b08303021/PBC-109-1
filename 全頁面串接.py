@@ -361,6 +361,8 @@ class Action(tk.Frame):
             self.write('已成功行動'+ str(act) + '\n')
             self.cooldown(0)
             B.exp += 10
+        else:
+            tkinter.messagebox.showinfo('還在冷卻哦!', '就算沒有秒數，還是在冷卻喔!')
 
     def write(self, txt):
         self.output.insert('1.0',str(txt))
