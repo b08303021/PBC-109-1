@@ -10,7 +10,6 @@ import math
 
 def Battle(Player, Fighter):
     text = ''
-    inithp = [Player.hp, Fighter.hp]
     while Player.hp > 0 and Fighter.hp > 0:
         text += (str(Player.name) + '攻擊' + str(Fighter.name) + '造成' + str(Player.atk*(1 - (Fighter.defend/1000))) + '傷害\n')
         Fighter.hp -= Player.atk*(1 - (Fighter.defend/1000))
@@ -22,8 +21,6 @@ def Battle(Player, Fighter):
         if Player.hp <= 0 and Fighter.hp > 0:
             text += ('戰鬥結束，' + Player.name + '倒下了\n')
             break
-    Player.hp = inithp[0]
-    Fighter.hp = inithp[1]
     return text
         
 
@@ -55,7 +52,7 @@ class Player():
     skill = a.skill
     avoid = a.avoid
 
-class Fighter1():
+class Fighter():
     name = b.name
     hp = b.hp
     atk = b.atk
@@ -93,6 +90,7 @@ class StartPage(tk.Frame):
         usr_name = self.var_usr_name.get()
         StartPage.name = usr_name
         a.name = usr_name
+        Player.name = usr_name
         yy = tkFont.families()
         if usr_name != '':
             self.destroy()
@@ -420,7 +418,7 @@ class Action(tk.Frame):
                 if B.exp >= B.maxexp[a.level-1]:
                     a.level += 1
                     if a.level <= len(B.maxexp):
-                        B.exp = 0
+                        B.exp -= 100
                     else:
                         B.exp = B.maxexp[len(B.maxexp)-1]
                     a.atk += 10  #未完成
@@ -479,10 +477,10 @@ class Boss(tk.Frame):
         self.bImage.grid(row=1, column=2, columnspan=2, sticky=tk.E)
 
         fSize1 = tkFont.Font(size=20)
-        pName = "玩家角色名"  # 會隨上場角色更動所以分開寫
+        pName = Player.name  # 會隨上場角色更動所以分開寫
         self.nameP = tk.Label(self, text=pName, font=fSize1)
         self.nameP.grid(row=2, column=0, sticky=tk.S)
-        bName = "Boss角色名"  # 會隨上場角色更動所以分開寫
+        bName = Fighter.name  # 會隨上場角色更動所以分開寫
         self.nameB = tk.Label(self, text=bName, font=fSize1)
         self.nameB.grid(row=2, column=3, sticky=tk.S)
 
@@ -492,7 +490,7 @@ class Boss(tk.Frame):
         self.level.grid(row=2, column=1, sticky=tk.SW)
         # def __init__(self, name, hp, atk, level, defend, skill, avoid, skilltype):
         pInfo = [Player.hp, Player.atk, Player.defend, Player.skill, Player.avoid]  # 玩家角色資訊[血量,攻擊,防禦,技能,閃避]
-        bInfo = [Fighter1.hp, Fighter1.atk, Fighter1.defend, Fighter1.skill, Fighter1.avoid]  # Boss角色資訊[血量,攻擊,防禦,技能,閃避]
+        bInfo = [Fighter.hp, Fighter.atk, Fighter.defend, Fighter.skill, Fighter.avoid]  # Boss角色資訊[血量,攻擊,防禦,技能,閃避]
 
         self.hp = tk.Label(self, text="－ －血量－ －", height=2, font=fSize2, bg='yellow')
         self.hp.grid(row=4, column=1, columnspan=2)
@@ -576,16 +574,30 @@ class Fight(tk.Frame):
         self.master.switch_frame(Level)
 
     def actiontext(self):
-        self.write(Battle(Player, Fighter1) + '\n')
-        if a.level <= len(B.maxexp):  #加經驗的部分，未完成 
-            B.exp += 11
+        inithp = [Player.hp, Fighter.hp]
+        self.write(Battle(Player, Fighter) + '\n')
+        if a.level <= len(B.maxexp):  #處理升等
+            earnedexp = 0
+            if Player.hp > 0:
+                earnedexp = 30
+            B.exp += earnedexp
             if B.exp >= B.maxexp[a.level-1]:
                 a.level += 1
-                B.exp = 0
-                a.atk += 10     
+                if a.level <= len(B.maxexp):
+                    B.exp -= 100
+                else:
+                    B.exp = B.maxexp[len(B.maxexp)-1]
+                a.atk += 10  #未完成
+                self.write('獲得' + str(earnedexp) + '點經驗並升級為' + str(a.level) + '等')
+            else:
+                self.write('獲得' + str(earnedexp) + '點經驗')
+        else:
+            self.write('您已達到滿等') 
+        Player.hp = inithp[0]
+        Fighter.hp = inithp[1]
         
     def write(self, txt):
-        self.output.insert('1.0', str(txt))
+        self.output.insert(tk.END, str(txt))
         self.update_idletasks()
 
 
