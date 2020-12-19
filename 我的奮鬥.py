@@ -9,20 +9,31 @@ import threading
 import math
 
 def Battle(Player, Fighter):
-    if Player.hp > 0:
-        print(Player.name + '攻擊' + Fighter.name + '造成' + str(Player.atk*Boss(1 - (Fighter.defend/1000))) + '傷害')
-    else:
-        return ('戰鬥結束，' + Player.name + '倒下了')
-    if Fighter.hp > 0:
-        print(Fighter.name + '攻擊' + Player.name + '造成' + str(Fighter.atk*Boss(1 - (Player.defend/1000))) + '傷害')
-    else:
-        return ('戰鬥結束，' + Fighter.name + '倒下了')
+    text = ''
+    inithp = [Player.hp, Fighter.hp]
+    while Player.hp > 0 and Fighter.hp > 0:
+        text += (str(Player.name) + '攻擊' + str(Fighter.name) + '造成' + str(Player.atk*(1 - (Fighter.defend/1000))) + '傷害\n')
+        Fighter.hp -= Player.atk*(1 - (Fighter.defend/1000))
+        if Fighter.hp <= 0 and Player.hp > 0:
+            text += ('戰鬥結束，' + Fighter.name + '倒下了\n')
+            break
+        text += (str(Fighter.name) + '攻擊' + str(Player.name) + '造成' + str(Fighter.atk*(1 - (Player.defend/1000))) + '傷害\n')
+        Player.hp -= Fighter.atk*(1 - (Player.defend/1000))
+        if Player.hp <= 0 and Fighter.hp > 0:
+            text += ('戰鬥結束，' + Player.name + '倒下了\n')
+            break
+    Player.hp = inithp[0]
+    Fighter.hp = inithp[1]
+    return text
+        
 
 class B():
     exp = 0
+    maxexp = [100, 100, 100, 100, 100]  #maxexp[x] 為第x等的最大經驗
 
 class Charaters():
-    def __init__(self, hp, atk, level, defend, skill, avoid, skilltype):
+    def __init__(self, name, hp, atk, level, defend, skill, avoid, skilltype):
+        self.name = name
         self.hp = hp
         self.atk = atk
         self.level = level
@@ -33,17 +44,19 @@ class Charaters():
 
 a_dict = dict()
 a_dict[0] = 2
-a = Charaters(500, 100, 1, 100, 5, 10, a_dict)
-b = Charaters(700, 70, 2, 70, 5, 3, a_dict)
+a = Charaters('', 500, 100, 1, 100, 5, 10, a_dict)
+b = Charaters('水源阿伯', 700, 70, 2, 70, 5, 3, a_dict)
 
 class Player():
+    name = a.name
     hp = a.hp
     atk = a.atk
     defend = a.defend
     skill = a.skill
     avoid = a.avoid
 
-class Fighter():
+class Fighter1():
+    name = b.name
     hp = b.hp
     atk = b.atk
     defend = b.defend
@@ -79,6 +92,7 @@ class StartPage(tk.Frame):
     # 獲取使用者輸入的usr_name和
         usr_name = self.var_usr_name.get()
         StartPage.name = usr_name
+        a.name = usr_name
         yy = tkFont.families()
         if usr_name != '':
             self.destroy()
@@ -116,7 +130,10 @@ class Game(tk.Frame):
         self.background = tk.Canvas(self, height = 600, width = 800, bg = 'white').pack()
         self.picture = tk.Canvas(self, height = 240, width = 240, bg = 'blue').place(x = 60, y = 60)
         # 經驗值
-        self.exp = tk.Label(self, text = (str(B.exp) + '/' + str(100)), height = 1, width = 12, bg = 'white', font = f3).place(x = 450, y = 290)
+        if a.level <= len(B.maxexp):
+            self.exp = tk.Label(self, text = (str(B.exp) + '/' + str(B.maxexp[a.level-1])), height = 1, width = 12, bg = 'white', font = f3).place(x = 450, y = 290)
+        else:
+            self.exp = tk.Label(self, text = (str(B.exp) + '/' + str(B.maxexp[a.level-2])), height = 1, width = 12, bg = 'white', font = f3).place(x = 450, y = 290)
         # 首頁基礎數值
         self.level = tk.Button(self, text = "等級：" + str(a.level), height = 1, width = 15, bg='#ccdd69', font = f3, anchor='w').place(x = 60, y = 360)
         self.blood = tk.Button(self, text = "血量：231", height = 1, width = 15, bg='#ccdd69', font = f3, anchor='w').place(x = 60, y = 420)
@@ -394,22 +411,31 @@ class Action(tk.Frame):
         self.cdnumber = tk.Label(self, textvariable=self.text, height = 1, width = 2, bg = 'white', font = f2, fg="red")
         self.cdnumber.place(x = 390 , y = 32)
         Action.cantrigger = True  # 為防止透過切頁重置CD這邊要做調整
-        
+
     def actiontext(self, act):
         if Action.cantrigger == True:
-            self.write('已成功行動'+ str(act) + '\n')
             self.cooldown(0)
-            B.exp += 11
-            if B.exp > 10:
-                a.level += 1
-                a.atk += 10
+            if a.level <= len(B.maxexp):  #處理升等
+                B.exp += 11
+                if B.exp >= B.maxexp[a.level-1]:
+                    a.level += 1
+                    if a.level <= len(B.maxexp):
+                        B.exp = 0
+                    else:
+                        B.exp = B.maxexp[len(B.maxexp)-1]
+                    a.atk += 10  #未完成
+                    self.write('已成功行動'+ str(act) + '獲得' + str(11) + '點經驗並升級為' + str(a.level) + '等\n')
+                else:
+                    self.write('已成功行動'+ str(act) + '獲得' + str(11) + '點經驗\n')
+            else:
+                self.write('已成功行動'+ str(act) + '，您已達到滿等\n')
         else:
-            tkinter.messagebox.showinfo('還在冷卻哦!', '就算沒有秒數，還是在冷卻喔!')
+            self.write('還在冷卻中\n')
 
     def write(self, txt):
         self.output.insert('1.0',str(txt))
         self.update_idletasks()
-
+        
     def cooldown(self, cdnum):
         if cdnum > 0:
             Action.cantrigger = False
@@ -464,9 +490,9 @@ class Boss(tk.Frame):
         pLevel = 0  # 會隨上場角色更動所以分開寫
         self.level = tk.Label(self, text=("Lv.", pLevel), font=fSize2)  # 角色等級
         self.level.grid(row=2, column=1, sticky=tk.SW)
-
-        pInfo = [0, 1, 2, 3, 4]  # 玩家角色資訊[血量,攻擊,防禦,技能,閃避]
-        bInfo = [0.0, 0.1, 0.2, 0.3, 0.4]  # Boss角色資訊[血量,攻擊,防禦,技能,閃避]
+        # def __init__(self, name, hp, atk, level, defend, skill, avoid, skilltype):
+        pInfo = [Player.hp, Player.atk, Player.defend, Player.skill, Player.avoid]  # 玩家角色資訊[血量,攻擊,防禦,技能,閃避]
+        bInfo = [Fighter1.hp, Fighter1.atk, Fighter1.defend, Fighter1.skill, Fighter1.avoid]  # Boss角色資訊[血量,攻擊,防禦,技能,閃避]
 
         self.hp = tk.Label(self, text="－ －血量－ －", height=2, font=fSize2, bg='yellow')
         self.hp.grid(row=4, column=1, columnspan=2)
@@ -520,13 +546,12 @@ class Boss(tk.Frame):
 
 
 class Fight(tk.Frame):
-    P_HP = Player.hp
-    F_HP = Fighter.hp
 
     def __init__(self, master):
         tk.Frame.__init__(self)
         self.grid()
         self.createWidgets()
+        self.actiontext()
         self.master.minsize(800, 600)
         self.master.maxsize(800, 600)
 
@@ -551,18 +576,17 @@ class Fight(tk.Frame):
         self.master.switch_frame(Level)
 
     def actiontext(self):
-        self.write(Battle(Player, Fighter) + '\n')
-        B.exp += 11
-        if B.exp > 10:
-            a.level += 1
-            a.atk += 10
-
+        self.write(Battle(Player, Fighter1) + '\n')
+        if a.level <= len(B.maxexp):  #加經驗的部分，未完成 
+            B.exp += 11
+            if B.exp >= B.maxexp[a.level-1]:
+                a.level += 1
+                B.exp = 0
+                a.atk += 10     
+        
     def write(self, txt):
         self.output.insert('1.0', str(txt))
         self.update_idletasks()
-
-    Player.hp = P_HP
-    Fighter.hp = F_HP
 
 
 if __name__ == "__main__":
