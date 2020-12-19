@@ -11,6 +11,14 @@ import math
 class B():
     exp = 0
 
+class Charaters():
+    def __init__(self, use, atk, level):
+        self.use = use
+        self.atk = atk
+        self.level = level
+
+a = Charaters(1, 100, 1)
+
 class SampleApp(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
@@ -79,9 +87,9 @@ class Game(tk.Frame):
         # 經驗值
         self.exp = tk.Label(self, text = (str(B.exp) + '/' + str(100)), height = 1, width = 12, bg = 'white', font = f3).place(x = 450, y = 290)
         # 首頁基礎數值
-        self.level = tk.Button(self, text = "等級：12", height = 1, width = 15, bg='#ccdd69', font = f3, anchor='w').place(x = 60, y = 360)
+        self.level = tk.Button(self, text = "等級：" + str(a.level), height = 1, width = 15, bg='#ccdd69', font = f3, anchor='w').place(x = 60, y = 360)
         self.blood = tk.Button(self, text = "血量：231", height = 1, width = 15, bg='#ccdd69', font = f3, anchor='w').place(x = 60, y = 420)
-        self.attack = tk.Button(self, text = "攻擊：243", height = 1, width = 15, bg='#ccdd69', font =f3, anchor='w').place(x = 60, y = 480)
+        self.attack = tk.Button(self, text = "攻擊：" + str(a.atk), height = 1, width = 15, bg='#ccdd69', font =f3, anchor='w').place(x = 60, y = 480)
         self.defend = tk.Button(self, text = "防禦：234", height = 1, width = 15, bg='#ccdd69', font =f3, anchor='w').place(x = 400, y = 360)
         self.skill = tk.Button(self, text = "技能：5%攻擊加倍", height = 1, width = 15, bg='#ccdd69', font =f3, anchor='w').place(x = 400, y = 420)
         self.dodge = tk.Button(self, text = "閃避：34%", height = 1, width = 15, font =f3, bg='#ccdd69', anchor='w').place(x = 400, y = 480)
@@ -360,7 +368,10 @@ class Action(tk.Frame):
         if Action.cantrigger == True:
             self.write('已成功行動'+ str(act) + '\n')
             self.cooldown(0)
-            B.exp += 10
+            B.exp += 11
+            if B.exp > 10:
+                a.level += 1
+                a.atk += 10
         else:
             tkinter.messagebox.showinfo('還在冷卻哦!', '就算沒有秒數，還是在冷卻喔!')
 
