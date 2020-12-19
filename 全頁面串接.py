@@ -8,8 +8,35 @@ from functools import partial
 import threading
 import math
 
-class B():
-    exp = 0
+import csv
+
+p_index = 1
+
+with open('test.csv', newline='') as f:
+    reader = csv.reader(f)
+    pData = list(reader)
+
+
+class Chr:
+    def __init__(self, name, words, exp, lv, hp, atk, defend, skill, miss):
+        self.name = name
+        self.words = words
+        self.exp = int(exp)
+        self.lv = int(lv)
+        self.hp = int(hp)
+        self.atk = int(atk)
+        self.defend = int(defend)
+        self.skill = skill
+        self.miss = miss
+
+    def add_exp(self, x):
+        self.exp += x
+
+
+player = []
+for p in pData:
+    player.append(Chr(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8]))
+
 
 class SampleApp(tk.Tk):
     def __init__(self):
@@ -77,7 +104,7 @@ class Game(tk.Frame):
         self.background = tk.Canvas(self, height = 600, width = 800, bg = 'white').pack()
         self.picture = tk.Canvas(self, height = 240, width = 240, bg = 'blue').place(x = 60, y = 60)
         # 經驗值
-        self.exp = tk.Label(self, text = (str(B.exp) + '/' + str(100)), height = 1, width = 12, bg = 'white', font = f3).place(x = 450, y = 290)
+        self.exp = tk.Label(self, text = (str(player[p_index].exp) + '/' + str(100)), height = 1, width = 12, bg = 'white', font = f3).place(x = 450, y = 290)
         # 首頁基礎數值
         self.level = tk.Button(self, text = "等級：12", height = 1, width = 15, bg='#ccdd69', font = f3, anchor='w').place(x = 60, y = 360)
         self.blood = tk.Button(self, text = "血量：231", height = 1, width = 15, bg='#ccdd69', font = f3, anchor='w').place(x = 60, y = 420)
@@ -360,7 +387,8 @@ class Action(tk.Frame):
         if Action.cantrigger == True:
             self.write('已成功行動'+ str(act) + '\n')
             self.cooldown(0)
-            B.exp += 10
+            global player
+            player[p_index].add_exp(10)
         else:
             tkinter.messagebox.showinfo('還在冷卻哦!', '就算沒有秒數，還是在冷卻喔!')
 
