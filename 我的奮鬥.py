@@ -13,7 +13,7 @@ p_index = 0  # 玩家選擇的角色編號
 b_index = 5  # 玩家選擇要打的Boss編號
 
 # 讀入數值
-with open('test.csv', newline='') as f:
+with open('player.csv', newline='') as f:
     reader = csv.reader(f)
     pData = list(reader)
     f.close()
