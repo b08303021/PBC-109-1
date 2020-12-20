@@ -86,8 +86,9 @@ class Fighter():
     file = player[b_index].file
 
 def Chr_Obatin(index):
-    player[index].obtained = 1
-    tkinter.messagebox.showinfo('獲得角色', '您已獲得'+ player[index].name)
+    if  player[index].obtained != 1:
+        player[index].obtained = 1
+        tkinter.messagebox.showinfo('獲得角色', '您已獲得'+ player[index].name)
     # 存檔
     
 class SampleApp(tk.Tk):
