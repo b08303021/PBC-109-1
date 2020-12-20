@@ -18,6 +18,12 @@ with open('player.csv', newline='') as f:
     pData = list(reader)
     f.close()
 
+with open('boss.csv', newline='') as f:
+    reader = csv.reader(f)
+    bData = list(reader)
+    f.close()
+
+
 # 紀錄角色最初數值
 class Chr:
     def __init__(self, name, words, exp, lv, hp, atk, defend, skill, miss, file, obtained):
@@ -40,7 +46,22 @@ class Chr:
 player = []
 for p in pData:
     player.append(Chr(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9], p[10]))
-    
+
+
+class Bos:
+    def __init__(self, name, fight, hp, atk, defend, miss, minLv, expDrop):
+        self.name = name
+        self.fight = fight
+        self.hp = int(hp)
+        self.atk = int(atk)
+        self.defend = int(defend)
+        self.miss = miss
+        self.minLv = int(minLv)
+        self.expDrop = int(expDrop)
+
+boss = []
+for b in bData:
+    boss.append(Bos(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]))
 
 # 戰鬥
 def Battle(Player, Fighter):
