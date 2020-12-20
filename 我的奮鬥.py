@@ -14,6 +14,7 @@ p_index = 1
 with open('test.csv', newline='') as f:
     reader = csv.reader(f)
     pData = list(reader)
+    f.close()
 
 
 class Chr:
@@ -68,7 +69,7 @@ class Charaters():
 
 a_dict = dict()
 a_dict[0] = 2
-a = Charaters('', 500, 100, 1, 100, 5, 10, a_dict)
+a = Charaters('都可以', 500, 100, 1, 100, 5, 10, a_dict)
 b = Charaters('水源阿伯', 700, 70, 2, 70, 5, 3, a_dict)
 
 class Player():
@@ -116,8 +117,6 @@ class StartPage(tk.Frame):
     # 獲取使用者輸入的usr_name和
         usr_name = self.var_usr_name.get()
         StartPage.name = usr_name
-        a.name = usr_name
-        Player.name = usr_name
         yy = tkFont.families()
         if usr_name != '':
             self.destroy()
@@ -167,7 +166,7 @@ class Game(tk.Frame):
         self.skill = tk.Button(self, text = "技能：5%攻擊加倍", height = 1, width = 15, bg='#ccdd69', font =f3, anchor='w').place(x = 400, y = 420)
         self.dodge = tk.Button(self, text = "閃避：34%", height = 1, width = 15, font =f3, bg='#ccdd69', anchor='w').place(x = 400, y = 480)
         # 角色名和自己的名稱
-        self.charater_name = tk.Label(self, text = "桐人", height = 1, width = 10, bg = 'white', font =f1).place(x = 420 , y = 100)
+        self.charater_name = tk.Label(self, text = Player.name, height = 1, width = 10, bg = 'white', font =f1).place(x = 420 , y = 100)
         self.name = tk. Label(self, text = StartPage.name, height = 1, width = 10, bg = 'white', font =f2).place(x = 80 , y = 310)
         self.word = '桐谷和人（桐ヶ谷きりがや 和人かずと，Kirigaya Kazuto），虛擬世界的用戶名為「桐人（キリト，Kirito）」，是日本小說家川原礫輕小說《刀劍神域》及其改編動、漫畫作品的主角。在以《刀劍神域》為主的諸多系列作裡作為主角或重要角色登場。'
         self.intro = tk.Message(self, text = self.word, font = f4, bg = 'white', width = 270).place(x = 400, y = 150)
@@ -445,7 +444,7 @@ class Action(tk.Frame):
                 if player[p_index].exp >= player[p_index].maxexp[a.level-1]:
                     a.level += 1
                     if a.level <= len(player[p_index].maxexp):
-                        player[p_index].exp -= 100
+                        player[p_index].exp -= player[p_index].maxexp[a.level-1]
                     else:
                         player[p_index].exp = player[p_index].maxexp[len(player[p_index].maxexp)-1]
                     a.atk += 10  #未完成
