@@ -20,7 +20,7 @@ with open('test.csv', newline='') as f:
 
 # 紀錄角色最初數值
 class Chr:
-    def __init__(self, name, words, exp, lv, hp, atk, defend, skill, miss, file):
+    def __init__(self, name, words, exp, lv, hp, atk, defend, skill, miss, file, obtained):
         self.name = name
         self.words = words
         self.exp = int(exp)
@@ -31,14 +31,16 @@ class Chr:
         self.skill = skill
         self.miss = miss
         self.file = file
+        self.obtained = int(obtained)  # 0 or 1
 
     def add_exp(self, x):
         self.exp += x
 
-    maxexp = [100, 100, 100, 100, 100]  # maxexp[x] 為第x等的最大經驗
+    maxexp = [50, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]  # maxexp[x] 為第x+1等的最大經驗
 player = []
 for p in pData:
-    player.append(Chr(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9]))
+    player.append(Chr(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9], p[10]))
+    
 
 # 戰鬥
 def Battle(Player, Fighter):
@@ -68,7 +70,8 @@ class Player():
     lv = player[p_index].lv
     exp = player[p_index].exp
     file = player[p_index].file
-
+    index = p_index
+        
 # 玩家選擇的BOSS數值
 class Fighter():
     name = player[b_index].name
@@ -82,6 +85,11 @@ class Fighter():
     exp = player[b_index].exp
     file = player[b_index].file
 
+def Chr_Obatin(index):
+    player[index].obtained = 1
+    tkinter.messagebox.showinfo('獲得角色', '您已獲得'+ player[index].name)
+    # 存檔
+    
 class SampleApp(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
@@ -153,7 +161,7 @@ class Game(tk.Frame):
         else:
             self.exp = tk.Label(self, text = (str(Player.exp) + '/' + str(player[p_index].maxexp[Player.lv-2])), height = 1, width = 12, bg = 'white', font = f3).place(x = 450, y = 290)
         # 首頁基礎數值
-        self.level = tk.Button(self, text = "等級：" + str(Player.lv), height = 1, width = 15, bg='#ccdd69', font = f3, anchor='w').place(x = 60, y = 360)
+        self.level = tk.Button(self, text = "等級：" + str(Player.lv), height = 1, width = 15, bg='#ccdd69', font = f3, anchor='w', command = partial(Chr_Obatin, 1)).place(x = 60, y = 360)
         self.blood = tk.Button(self, text = "血量：" + str(Player.hp), height = 1, width = 15, bg='#ccdd69', font = f3, anchor='w').place(x = 60, y = 420)
         self.attack = tk.Button(self, text = "攻擊：" + str(Player.atk), height = 1, width = 15, bg='#ccdd69', font =f3, anchor='w').place(x = 60, y = 480)
         self.defend = tk.Button(self, text = "防禦：" + str(Player.defend), height = 1, width = 15, bg='#ccdd69', font =f3, anchor='w').place(x = 400, y = 360)
@@ -282,15 +290,15 @@ class Level(tk.Frame):
 
 
 class ChooseCharacter(tk.Frame):
-    haveCharacter2 = False  # 是否擁有該角色
-    haveCharacter3 = False
-    haveCharacter4 = False
-    haveCharacter5 = False
-    haveCharacter6 = False
-    haveCharacter7 = False
-    haveCharacter8 = False
-    haveCharacter9 = False
-    haveCharacter10 = False
+    #haveCharacter2 = False  # 是否擁有該角色
+    #haveCharacter3 = False
+    #haveCharacter4 = False
+    #haveCharacter5 = False
+    #haveCharacter6 = False
+    #haveCharacter7 = False
+    #haveCharacter8 = False
+    #haveCharacter9 = False
+    #haveCharacter10 = False
 
     def __init__(self, master):
         tk.Frame.__init__(self)
@@ -320,25 +328,25 @@ class ChooseCharacter(tk.Frame):
         #  建立按鈕
         self.btnBack = tk.Button(self, text="返回", height=1, width=6, font=('KaiTi', 30), bg='#00E3E3', command=self.toGame)
         self.imageChr1 = ImageTk.PhotoImage(file="Chr1.png")
-        self.btnChr1 = tk.Button(self, image=self.imageChr1, command=self.clickBtnChr1, height=140, width=148)
+        self.btnChr1 = tk.Button(self, image=self.imageChr1, command=partial(self.clickBtnChr, 0), height=140, width=148)
         self.imageChr2 = ImageTk.PhotoImage(file="Chr2.png")
-        self.btnChr2 = tk.Button(self, image=self.imageChr2, command=self.clickBtnChr2, height=140, width=148)
+        self.btnChr2 = tk.Button(self, image=self.imageChr2, command=partial(self.clickBtnChr, 1), height=140, width=148)
         self.imageChr3 = ImageTk.PhotoImage(file="Chr3.png")
-        self.btnChr3 = tk.Button(self, image=self.imageChr3, command=self.clickBtnChr3, height=140, width=148)
+        self.btnChr3 = tk.Button(self, image=self.imageChr3, command=partial(self.clickBtnChr, 2), height=140, width=148)
         self.imageChr4 = ImageTk.PhotoImage(file="Chr4.png")
-        self.btnChr4 = tk.Button(self, image=self.imageChr4, command=self.clickBtnChr4, height=140, width=148)
+        self.btnChr4 = tk.Button(self, image=self.imageChr4, command=partial(self.clickBtnChr, 3), height=140, width=148)
         self.imageChr5 = ImageTk.PhotoImage(file="Chr5.png")
-        self.btnChr5 = tk.Button(self, image=self.imageChr5, command=self.clickBtnChr5, height=140, width=148)
+        self.btnChr5 = tk.Button(self, image=self.imageChr5, command=partial(self.clickBtnChr, 4), height=140, width=148)
         self.imageChr6 = ImageTk.PhotoImage(file="Chr6.png")
-        self.btnChr6 = tk.Button(self, image=self.imageChr6, command=self.clickBtnChr6, height=140, width=148)
+        self.btnChr6 = tk.Button(self, image=self.imageChr6, command=partial(self.clickBtnChr, 5), height=140, width=148)
         self.imageChr7 = ImageTk.PhotoImage(file="Chr7.png")
-        self.btnChr7 = tk.Button(self, image=self.imageChr7, command=self.clickBtnChr7, height=140, width=148)
+        self.btnChr7 = tk.Button(self, image=self.imageChr7, command=partial(self.clickBtnChr, 6), height=140, width=148)
         self.imageChr8 = ImageTk.PhotoImage(file="Chr8.png")
-        self.btnChr8 = tk.Button(self, image=self.imageChr8, command=self.clickBtnChr8, height=140, width=148)
+        self.btnChr8 = tk.Button(self, image=self.imageChr8, command=partial(self.clickBtnChr, 7), height=140, width=148)
         self.imageChr9 = ImageTk.PhotoImage(file="Chr9.png")
-        self.btnChr9 = tk.Button(self, image=self.imageChr9, command=self.clickBtnChr9, height=140, width=148)
+        self.btnChr9 = tk.Button(self, image=self.imageChr9, command=partial(self.clickBtnChr, 8), height=140, width=148)
         self.imageChr10 = ImageTk.PhotoImage(file="Chr10.png")
-        self.btnChr10 = tk.Button(self, image=self.imageChr10, command=self.clickBtnChr10, height=140, width=148)
+        self.btnChr10 = tk.Button(self, image=self.imageChr10, command=partial(self.clickBtnChr, 9), height=140, width=148)
 
         # 設定位置
         self.lblChooseChr.place(x=320, y=35)
@@ -367,34 +375,34 @@ class ChooseCharacter(tk.Frame):
         self.lblChr10.place(x=642, y=520)
 
     #  設定按鈕觸發事件
-    def clickBtnChr1(self):
-        ### 切換至角色一
-        pass
-    def clickBtnChr2(self):
-        """
-        if self.haveCharacter2 == True:
-            則切換至角色二
+    def clickBtnChr(self, index):
+        if Player.index == index:  #不知道為甚麼我不能直接用p_index
+            tkinter.messagebox.showinfo('您目前為該角色')
         else:
-            跳出對話框說:您尚未擁有該角色
-        """
-        pass
-    def clickBtnChr3(self):
-        pass
-    def clickBtnChr4(self):
-        pass
-    def clickBtnChr5(self):
-        pass
-    def clickBtnChr6(self):
-        pass
-    def clickBtnChr7(self):
-        pass
-    def clickBtnChr8(self):
-        pass
-    def clickBtnChr9(self):
-        pass
-    def clickBtnChr10(self):
-        pass
-
+            response = messagebox.askokcancel("選擇角色", "即將選擇角色" + str(index) + "?\n當前的角色進度會被保存")
+            if response == True:
+                if player[index].obtained == 1:
+                    p_index = index
+                    Player.index = index
+                    # 讀取
+                    Player.name = player[index].name
+                    Player.hp = player[index].hp
+                    Player.atk = player[index].atk
+                    Player.defend = player[index].defend
+                    Player.skill = player[index].skill
+                    Player.miss = player[index].miss
+                    Player.words = player[index].words
+                    Player.lv = player[index].lv
+                    Player.exp = player[index].exp
+                    Player.file = player[index].file
+                    # 存檔
+                    
+                    self.toGame()
+                else:
+                    tkinter.messagebox.showinfo('錯誤', '您未擁有該角色')
+            elif response == False:
+                pass
+            
     def toGame(self):
         self.destroy()
         self.master.switch_frame(Game)
@@ -447,7 +455,7 @@ class Action(tk.Frame):
                 if Player.exp >= player[p_index].maxexp[Player.lv-1]:
                     Player.lv += 1
                     if Player.lv <= len(player[p_index].maxexp):
-                        Player.exp -= 100
+                        Player.exp -= player[Player.index].maxexp[Player.lv - 2]
                     else:
                         Player.exp = player[p_index].maxexp[len(player[p_index].maxexp)-1]
                     Player.atk += 10  #未完成
@@ -613,10 +621,10 @@ class Fight(tk.Frame):
             if Player.exp >= player[p_index].maxexp[Player.lv-1]:
                 Player.lv += 1
                 if Player.lv <= len(player[p_index].maxexp):
-                    Player.exp -= 100
+                    Player.exp -= player[Player.index].maxexp[Player.lv - 2]
                 else:
                     Player.exp = player[p_index].maxexp[len(player[p_index].maxexp)-1]
-                a.atk += 10  #未完成
+                Player.atk += 10  #角色成長未完成
                 self.write('獲得' + str(earnedexp) + '點經驗並升級為' + str(Player.lv) + '等')
             else:
                 self.write('獲得' + str(earnedexp) + '點經驗')
