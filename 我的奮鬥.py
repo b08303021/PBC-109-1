@@ -9,14 +9,16 @@ import threading
 import math
 import csv
 
-p_index = 1
+p_index = 0  # 玩家選擇的角色編號
+b_index = 3  # 玩家選擇要打的Boss編號
 
+# 讀入數值
 with open('test.csv', newline='') as f:
     reader = csv.reader(f)
     pData = list(reader)
     f.close()
 
-
+# 紀錄角色最初數值
 class Chr:
     def __init__(self, name, words, exp, lv, hp, atk, defend, skill, miss):
         self.name = name
@@ -33,13 +35,11 @@ class Chr:
         self.exp += x
 
     maxexp = [100, 100, 100, 100, 100]  # maxexp[x] 為第x等的最大經驗
-
-
 player = []
 for p in pData:
     player.append(Chr(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8]))
 
-
+# 戰鬥
 def Battle(Player, Fighter):
     text = ''
     while Player.hp > 0 and Fighter.hp > 0:
@@ -55,38 +55,29 @@ def Battle(Player, Fighter):
             break
     return text
 
-
-class Charaters():
-    def __init__(self, name, hp, atk, level, defend, skill, avoid, skilltype):
-        self.name = name
-        self.hp = hp
-        self.atk = atk
-        self.level = level
-        self.defend = defend
-        self.skill = skill
-        self.avoid = avoid
-        self.skilltype = skilltype
-
-a_dict = dict()
-a_dict[0] = 2
-a = Charaters('都可以', 500, 100, 1, 100, 5, 10, a_dict)
-b = Charaters('水源阿伯', 700, 70, 2, 70, 5, 3, a_dict)
-
+# 玩家選擇的角色數值
 class Player():
-    name = a.name
-    hp = a.hp
-    atk = a.atk
-    defend = a.defend
-    skill = a.skill
-    avoid = a.avoid
+    name = player[p_index].name
+    hp = player[p_index].hp
+    atk = player[p_index].atk
+    defend = player[p_index].defend
+    skill = player[p_index].skill
+    miss = player[p_index].miss
+    words = player[p_index].words
+    lv = player[p_index].lv
+    exp = player[p_index].exp
 
+# 玩家選擇的BOSS數值
 class Fighter():
-    name = b.name
-    hp = b.hp
-    atk = b.atk
-    defend = b.defend
-    skill = b.skill
-    avoid = b.avoid
+    name = player[b_index].name
+    hp = player[b_index].hp
+    atk = player[b_index].atk
+    defend = player[b_index].defend
+    skill = player[b_index].skill
+    miss = player[b_index].miss
+    words = player[b_index].words
+    lv = player[b_index].lv
+    exp = player[b_index].exp
 
 class SampleApp(tk.Tk):
     def __init__(self):
@@ -154,27 +145,27 @@ class Game(tk.Frame):
         self.background = tk.Canvas(self, height = 600, width = 800, bg = 'white').pack()
         self.picture = tk.Canvas(self, height = 240, width = 240, bg = 'blue').place(x = 60, y = 60)
         # 經驗值
-        if a.level <= len(player[p_index].maxexp):
-            self.exp = tk.Label(self, text = (str(player[p_index].exp) + '/' + str(player[p_index].maxexp[a.level-1])), height = 1, width = 12, bg = 'white', font = f3).place(x = 450, y = 290)
+        if Player.lv <= len(player[p_index].maxexp):
+            self.exp = tk.Label(self, text = (str(Player.exp) + '/' + str(player[p_index].maxexp[Player.lv-1])), height = 1, width = 12, bg = 'white', font = f3).place(x = 450, y = 290)
         else:
-            self.exp = tk.Label(self, text = (str(player[p_index].exp) + '/' + str(player[p_index].maxexp[a.level-2])), height = 1, width = 12, bg = 'white', font = f3).place(x = 450, y = 290)
+            self.exp = tk.Label(self, text = (str(Player.exp) + '/' + str(player[p_index].maxexp[Player.lv-2])), height = 1, width = 12, bg = 'white', font = f3).place(x = 450, y = 290)
         # 首頁基礎數值
-        self.level = tk.Button(self, text = "等級：" + str(a.level), height = 1, width = 15, bg='#ccdd69', font = f3, anchor='w').place(x = 60, y = 360)
-        self.blood = tk.Button(self, text = "血量：231", height = 1, width = 15, bg='#ccdd69', font = f3, anchor='w').place(x = 60, y = 420)
-        self.attack = tk.Button(self, text = "攻擊：" + str(a.atk), height = 1, width = 15, bg='#ccdd69', font =f3, anchor='w').place(x = 60, y = 480)
-        self.defend = tk.Button(self, text = "防禦：234", height = 1, width = 15, bg='#ccdd69', font =f3, anchor='w').place(x = 400, y = 360)
-        self.skill = tk.Button(self, text = "技能：5%攻擊加倍", height = 1, width = 15, bg='#ccdd69', font =f3, anchor='w').place(x = 400, y = 420)
-        self.dodge = tk.Button(self, text = "閃避：34%", height = 1, width = 15, font =f3, bg='#ccdd69', anchor='w').place(x = 400, y = 480)
+        self.level = tk.Button(self, text = "等級：" + str(Player.lv), height = 1, width = 15, bg='#ccdd69', font = f3, anchor='w').place(x = 60, y = 360)
+        self.blood = tk.Button(self, text = "血量：" + str(Player.hp), height = 1, width = 15, bg='#ccdd69', font = f3, anchor='w').place(x = 60, y = 420)
+        self.attack = tk.Button(self, text = "攻擊：" + str(Player.atk), height = 1, width = 15, bg='#ccdd69', font =f3, anchor='w').place(x = 60, y = 480)
+        self.defend = tk.Button(self, text = "防禦：" + str(Player.defend), height = 1, width = 15, bg='#ccdd69', font =f3, anchor='w').place(x = 400, y = 360)
+        self.skill = tk.Button(self, text = "技能：" + str(Player.skill), height = 1, width = 15, bg='#ccdd69', font =f3, anchor='w').place(x = 400, y = 420)
+        self.dodge = tk.Button(self, text = "閃避：" + str(Player.miss), height = 1, width = 15, font =f3, bg='#ccdd69', anchor='w').place(x = 400, y = 480)
         # 角色名和自己的名稱
         self.charater_name = tk.Label(self, text = Player.name, height = 1, width = 10, bg = 'white', font =f1).place(x = 420 , y = 100)
         self.name = tk. Label(self, text = StartPage.name, height = 1, width = 10, bg = 'white', font =f2).place(x = 80 , y = 310)
-        self.word = '桐谷和人（桐ヶ谷きりがや 和人かずと，Kirigaya Kazuto），虛擬世界的用戶名為「桐人（キリト，Kirito）」，是日本小說家川原礫輕小說《刀劍神域》及其改編動、漫畫作品的主角。在以《刀劍神域》為主的諸多系列作裡作為主角或重要角色登場。'
+        self.word = Player.words
         self.intro = tk.Message(self, text = self.word, font = f4, bg = 'white', width = 270).place(x = 400, y = 150)
         # 按鈕
         self.boss = tk.Button(self, text = "關\n卡", height = 2, width = 2, font = f3, bg='#bbaa69', command= self.toLevel).place(x = 760 , y = 60)
         self.character = tk.Button(self, text = "角\n色", height = 2, width = 2, bg='#bbaa69', font = f3, command=self.toCharacter).place(x = 760 , y = 180)
         self.action  = tk.Button(self, text = "行\n動", height = 2, width = 2, font = f3, bg='#bbaa69', command= self.toAction).place(x = 760 , y = 300)
-    
+
     def toAction(self):
         self.destroy()
         self.master.switch_frame(Action)
@@ -439,16 +430,16 @@ class Action(tk.Frame):
     def actiontext(self, act):
         if Action.cantrigger == True:
             self.cooldown(0)
-            if a.level <= len(player[p_index].maxexp):  #處理升等
-                player[p_index].exp += 11
-                if player[p_index].exp >= player[p_index].maxexp[a.level-1]:
-                    a.level += 1
-                    if a.level <= len(player[p_index].maxexp):
-                        player[p_index].exp -= player[p_index].maxexp[a.level-1]
+            if Player.lv <= len(player[p_index].maxexp):  #處理升等
+                Player.exp += 11
+                if Player.exp >= player[p_index].maxexp[Player.lv-1]:
+                    Player.lv += 1
+                    if Player.lv <= len(player[p_index].maxexp):
+                        Player.exp -= 100
                     else:
-                        player[p_index].exp = player[p_index].maxexp[len(player[p_index].maxexp)-1]
-                    a.atk += 10  #未完成
-                    self.write('已成功行動'+ str(act) + '獲得' + str(11) + '點經驗並升級為' + str(a.level) + '等\n')
+                        Player.exp = player[p_index].maxexp[len(player[p_index].maxexp)-1]
+                    Player.atk += 10  #未完成
+                    self.write('已成功行動'+ str(act) + '獲得' + str(11) + '點經驗並升級為' + str(Player.lv) + '等\n')
                 else:
                     self.write('已成功行動'+ str(act) + '獲得' + str(11) + '點經驗\n')
             else:
@@ -511,12 +502,12 @@ class Boss(tk.Frame):
         self.nameB.grid(row=2, column=3, sticky=tk.S)
 
         fSize2 = tkFont.Font(size=14)
-        pLevel = 0  # 會隨上場角色更動所以分開寫
+        pLevel = Player.lv  # 會隨上場角色更動所以分開寫
         self.level = tk.Label(self, text=("Lv.", pLevel), font=fSize2)  # 角色等級
         self.level.grid(row=2, column=1, sticky=tk.SW)
-        # def __init__(self, name, hp, atk, level, defend, skill, avoid, skilltype):
-        pInfo = [Player.hp, Player.atk, Player.defend, Player.skill, Player.avoid]  # 玩家角色資訊[血量,攻擊,防禦,技能,閃避]
-        bInfo = [Fighter.hp, Fighter.atk, Fighter.defend, Fighter.skill, Fighter.avoid]  # Boss角色資訊[血量,攻擊,防禦,技能,閃避]
+        # def __init__(self, name, hp, atk, level, defend, skill, miss, skilltype):
+        pInfo = [Player.hp, Player.atk, Player.defend, Player.skill, Player.miss]  # 玩家角色資訊[血量,攻擊,防禦,技能,閃避]
+        bInfo = [Fighter.hp, Fighter.atk, Fighter.defend, Fighter.skill, Fighter.miss]  # Boss角色資訊[血量,攻擊,防禦,技能,閃避]
 
         self.hp = tk.Label(self, text="－ －血量－ －", height=2, font=fSize2, bg='yellow')
         self.hp.grid(row=4, column=1, columnspan=2)
@@ -602,19 +593,19 @@ class Fight(tk.Frame):
     def actiontext(self):
         inithp = [Player.hp, Fighter.hp]
         self.write(Battle(Player, Fighter) + '\n')
-        if a.level <= len(player[p_index].maxexp):  #處理升等
+        if Player.lv <= len(player[p_index].maxexp):  #處理升等
             earnedexp = 0
             if Player.hp > 0:
                 earnedexp = 30
-            player[p_index].exp += earnedexp
-            if player[p_index].exp >= player[p_index].maxexp[a.level-1]:
-                a.level += 1
-                if a.level <= len(player[p_index].maxexp):
-                    player[p_index].exp -= 100
+            Player.exp += earnedexp
+            if Player.exp >= player[p_index].maxexp[Player.lv-1]:
+                Player.lv += 1
+                if Player.lv <= len(player[p_index].maxexp):
+                    Player.exp -= 100
                 else:
-                    player[p_index].exp = player[p_index].maxexp[len(player[p_index].maxexp)-1]
+                    Player.exp = player[p_index].maxexp[len(player[p_index].maxexp)-1]
                 a.atk += 10  #未完成
-                self.write('獲得' + str(earnedexp) + '點經驗並升級為' + str(a.level) + '等')
+                self.write('獲得' + str(earnedexp) + '點經驗並升級為' + str(Player.lv) + '等')
             else:
                 self.write('獲得' + str(earnedexp) + '點經驗')
         else:
