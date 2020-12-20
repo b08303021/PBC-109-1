@@ -10,7 +10,7 @@ import math
 import csv
 
 p_index = 0  # 玩家選擇的角色編號
-b_index = 3  # 玩家選擇要打的Boss編號
+b_index = 5  # 玩家選擇要打的Boss編號
 
 # 讀入數值
 with open('test.csv', newline='') as f:
@@ -20,7 +20,7 @@ with open('test.csv', newline='') as f:
 
 # 紀錄角色最初數值
 class Chr:
-    def __init__(self, name, words, exp, lv, hp, atk, defend, skill, miss):
+    def __init__(self, name, words, exp, lv, hp, atk, defend, skill, miss, file):
         self.name = name
         self.words = words
         self.exp = int(exp)
@@ -30,6 +30,7 @@ class Chr:
         self.defend = int(defend)
         self.skill = skill
         self.miss = miss
+        self.file = file
 
     def add_exp(self, x):
         self.exp += x
@@ -37,7 +38,7 @@ class Chr:
     maxexp = [100, 100, 100, 100, 100]  # maxexp[x] 為第x等的最大經驗
 player = []
 for p in pData:
-    player.append(Chr(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8]))
+    player.append(Chr(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9]))
 
 # 戰鬥
 def Battle(Player, Fighter):
@@ -66,6 +67,7 @@ class Player():
     words = player[p_index].words
     lv = player[p_index].lv
     exp = player[p_index].exp
+    file = player[p_index].file
 
 # 玩家選擇的BOSS數值
 class Fighter():
@@ -78,6 +80,7 @@ class Fighter():
     words = player[b_index].words
     lv = player[b_index].lv
     exp = player[b_index].exp
+    file = player[b_index].file
 
 class SampleApp(tk.Tk):
     def __init__(self):
@@ -216,16 +219,16 @@ class Level(tk.Frame):
         self.image10 = ImageTk.PhotoImage(file = "10.jpg")
         
         self.back = tk.Button(self, text = "返回", width = 3, bg='#00E3E3', bd=1, font = ('KaiTi', 25), command = self.toGame)
-        self.btn1 = tk.Button(self, image = self.image1, command = self.check, font = f2, height = 200, width = 150)
-        self.btn2 = tk.Button(self, image = self.image2, command = self.check, font = f2, height = 200, width = 150)
-        self.btn3 = tk.Button(self, image = self.image3, command = self.check, font = f2, height = 200, width = 150)
-        self.btn4 = tk.Button(self, image = self.image4, command = self.check, font = f2, height = 200, width = 150)
-        self.btn5 = tk.Button(self, image = self.image5, command = self.check, font = f2, height = 200, width = 150)
-        self.btn6 = tk.Button(self, image = self.image6, command = self.check, font = f2, height = 200, width = 150)
-        self.btn7 = tk.Button(self, image = self.image7, command = self.check, font = f2, height = 200, width = 150)
-        self.btn8 = tk.Button(self, image = self.image8, command = self.check, font = f2, height = 200, width = 150)
-        self.btn9 = tk.Button(self, image = self.image9, command = self.check, font = f2, height = 200, width = 150)
-        self.btn10 = tk.Button(self, image = self.image10, command = self.check, font = f2, height = 200, width = 150)
+        self.btn1 = tk.Button(self, image = self.image1, command = partial(self.check, 0), font = f2, height = 200, width = 150)
+        self.btn2 = tk.Button(self, image = self.image2, command = partial(self.check, 1), font = f2, height = 200, width = 150)
+        self.btn3 = tk.Button(self, image = self.image3, command = partial(self.check, 2), font = f2, height = 200, width = 150)
+        self.btn4 = tk.Button(self, image = self.image4, command = partial(self.check, 3), font = f2, height = 200, width = 150)
+        self.btn5 = tk.Button(self, image = self.image5, command = partial(self.check, 4), font = f2, height = 200, width = 150)
+        self.btn6 = tk.Button(self, image = self.image6, command = partial(self.check, 5), font = f2, height = 200, width = 150)
+        self.btn7 = tk.Button(self, image = self.image7, command = partial(self.check, 6), font = f2, height = 200, width = 150)
+        self.btn8 = tk.Button(self, image = self.image8, command = partial(self.check, 7), font = f2, height = 200, width = 150)
+        self.btn9 = tk.Button(self, image = self.image9, command = partial(self.check, 8), font = f2, height = 200, width = 150)
+        self.btn10 = tk.Button(self, image = self.image10, command = partial(self.check, 9), font = f2, height = 200, width = 150)
         
         self.back.grid(ipady=30, sticky = tk.NE + tk.SW)
         self.level.grid(row = 0, column = 3, columnspan=2, sticky = tk.NE + tk.SW, ipady=30)
@@ -251,10 +254,21 @@ class Level(tk.Frame):
         self.btn9.grid(row = 3, column = 3, sticky = tk.NE + tk.SW)
         self.btn10.grid(row = 3, column = 4, sticky = tk.NE + tk.SW)
 
-    def check(self):
+    def check(self, num):
         response = messagebox.askokcancel("進入關卡", "即將進入關卡？")
         if response == True:
-            self.toBoss()  
+            b_index = num
+            Fighter.name = player[b_index].name
+            Fighter.hp = player[b_index].hp
+            Fighter.atk = player[b_index].atk
+            Fighter.defend = player[b_index].defend
+            Fighter.skill = player[b_index].skill
+            Fighter.miss = player[b_index].miss
+            Fighter.words = player[b_index].words
+            Fighter.lv = player[b_index].lv
+            Fighter.exp = player[b_index].exp
+            Fighter.file = player[b_index].file
+            self.toBoss()
         elif response == False:
             pass
         
@@ -353,8 +367,6 @@ class ChooseCharacter(tk.Frame):
         self.lblChr10.place(x=642, y=520)
 
     #  設定按鈕觸發事件
-    def clickBtnBack(self):
-        pass
     def clickBtnChr1(self):
         ### 切換至角色一
         pass
@@ -483,12 +495,12 @@ class Boss(tk.Frame):
         self.bg.grid(row=1, column=0, columnspan=4)
 
     def createWidgets(self):
-        pFile = 'p6P.gif'  # 注意檔案路徑，會隨上場角色更動所以分開寫
+        pFile = Player.file  # 注意檔案路徑，會隨上場角色更動所以分開寫
         self.imageP = tk.PhotoImage(file=pFile)  # 注意檔案路徑
         self.pImage = tk.Label(self, image=self.imageP)  # 玩家角色圖
         self.pImage.grid(row=1, column=0, columnspan=2, sticky=tk.W)
 
-        bFile = 'p6P.gif'  # 注意檔案路徑，會隨上場角色更動所以分開寫
+        bFile = Fighter.file  # 注意檔案路徑，會隨上場角色更動所以分開寫
         self.imageB = tk.PhotoImage(file=bFile)  # 注意檔案路徑
         self.bImage = tk.Label(self, image=self.imageB)  # Boss角色名
         self.bImage.grid(row=1, column=2, columnspan=2, sticky=tk.E)
