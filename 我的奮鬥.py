@@ -66,7 +66,7 @@ class Bos:
 
 boss = []
 for b in bData:
-    boss.append(Bos(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]))
+    boss.append(Bos(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], b[8]))
 
 # 戰鬥
 def Battle(Player, Fighter, b_index):
