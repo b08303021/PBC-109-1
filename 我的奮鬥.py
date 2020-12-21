@@ -52,6 +52,7 @@ for p in pData:
     player.append(Chr(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9], p[10]))
 
 
+
 class Bos:
     def __init__(self, name, words, hp, atk, defend, miss, minLv, expDrop, skill):
         self.name = name
@@ -326,15 +327,6 @@ class Level(tk.Frame):
 
 
 class ChooseCharacter(tk.Frame):
-    #haveCharacter2 = False  # 是否擁有該角色
-    #haveCharacter3 = False
-    #haveCharacter4 = False
-    #haveCharacter5 = False
-    #haveCharacter6 = False
-    #haveCharacter7 = False
-    #haveCharacter8 = False
-    #haveCharacter9 = False
-    #haveCharacter10 = False
 
     def __init__(self, master):
         tk.Frame.__init__(self)
@@ -418,6 +410,15 @@ class ChooseCharacter(tk.Frame):
             response = messagebox.askokcancel("選擇角色", "即將選擇角色" + str(index) + "?\n當前的角色進度會被保存")
             if response == True:
                 if player[index].obtained == 1:
+                    player[Player.index].name = Player.name
+                    player[Player.index].hp = Player.hp
+                    player[Player.index].atk = Player.atk
+                    player[Player.index].defend = Player.defend
+                    player[Player.index].skill = Player.skill
+                    player[Player.index].miss = Player.miss
+                    player[Player.index].lv = Player.lv
+                    player[Player.index].exp = Player.exp
+                    
                     p_index = index
                     Player.index = index
                     # 讀取
@@ -618,6 +619,7 @@ class Boss(tk.Frame):
         self.btnFight = tk.Button(self, text="戰  鬥", height=1, width=10, font=fSize1, bg='#FF5151', command=self.toFight)  # 暫定戰鬥鍵
         self.btnFight.grid(row=9, column=1, columnspan=2)
 
+
     def toLevel(self):
         self.destroy()
         self.master.switch_frame(Level)
@@ -661,10 +663,10 @@ class Fight(tk.Frame):
         inithp = [Player.hp, Fighter.hp]
         self.write(Battle(Player, Fighter, b_index) + '\n')
         if Player.lv <= len(player[p_index].maxexp):  #處理升等
-            earnedexp = 0
+            exp = 0
             if Player.hp > 0:
-                earnedexp = 30
-            Player.exp += earnedexp
+                Player.exp += int(Fighter.expDrop/10)
+                exp = int(Fighter.expDrop/10)
             if Player.exp >= player[p_index].maxexp[Player.lv-1]:
                 Player.lv += 1
                 if Player.lv <= len(player[p_index].maxexp):
@@ -676,9 +678,9 @@ class Fight(tk.Frame):
                         Player.miss += 0.01
                 else:
                     Player.exp = player[p_index].maxexp[len(player[p_index].maxexp)-1]
-                self.write('獲得' + str(earnedexp) + '點經驗並升級為' + str(Player.lv) + '等')
+                self.write('獲得' + str(int(Fighter.expDrop/10)) + '點經驗並升級為' + str(Player.lv) + '等')
             else:
-                self.write('獲得' + str(earnedexp) + '點經驗')
+                self.write('獲得' + str(exp) + '點經驗')
         else:
             self.write('您已達到滿等') 
         Player.hp = inithp[0]
