@@ -56,7 +56,7 @@ for p in pData:
 
 
 class Bos:
-    def __init__(self, name, words, hp, atk, defend, miss, minLv, expDrop, skill, choose, fight):
+    def __init__(self, name, words, hp, atk, defend, miss, minLv, expDrop, skill, choose, fight, prob):
         self.name = name
         self.words = words
         self.hp = int(hp)
@@ -68,10 +68,10 @@ class Bos:
         self.skill = skill
         self.choose = choose
         self.fight = fight
-
+        self.prob = float(prob)
 boss = []
 for b in bData:
-    boss.append(Bos(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], b[8], b[9], b[10]))
+    boss.append(Bos(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], b[8], b[9], b[10], b[11]))
 
 level_list = [0, 1, 3, 5, 7]  # 會掉落角色的關卡
 
@@ -79,8 +79,23 @@ level_list = [0, 1, 3, 5, 7]  # 會掉落角色的關卡
 def Battle(Player, Fighter, b_index):
     text = ''
     while Player.hp > 0 and Fighter.hp > 0:
-        text += (str(Player.name) + '攻擊' + str(Fighter.name) + '造成' + str(Player.atk*(1 - (Fighter.defend/1000))) + '傷害\n')
-        Fighter.hp -= Player.atk*(1 - (Fighter.defend/1000))
+        if Player.skill[-4:] == '攻擊加倍':
+            prob = int(Player.skill[:Player.skill.find('%')])
+            a = random.randint(1,100)
+            if a <= prob:
+                av = random.randint(1,100)
+                if av <= int(Fighter.miss*100):
+                    text += (str(StartPage.name) + ':' + str(Player.skill) + '!\n' + str(Player.name) + '攻擊' + str(Fighter.name)+'但沒有成功命中\n')
+                else:
+                    text += (str(StartPage.name) + ':' + str(Player.skill) + '!\n' + str(Player.name) + '攻擊' + str(Fighter.name) + '造成' + str(2*Player.atk*(1 - (Fighter.defend/1000))) + '傷害\n')
+                    Fighter.hp -= 2*Player.atk*(1 - (Fighter.defend/1000))
+            else:
+                av = random.randint(1,100)
+                if av <= int(Fighter.miss*100):
+                    text += (str(Player.name)+'攻擊' + str(Fighter.name)+'但沒有成功命中\n')
+                else:
+                    text += (str(Player.name) + '攻擊' + str(Fighter.name) + '造成' + str(Player.atk*(1 - (Fighter.defend/1000))) + '傷害\n')
+                    Fighter.hp -= Player.atk*(1 - (Fighter.defend/1000))
         if Fighter.hp <= 0 and Player.hp > 0:
             if (len(level_list) > 0) and (b_index in level_list):  # 掉落角色
                 a = random.randint(0,99)
@@ -92,8 +107,21 @@ def Battle(Player, Fighter, b_index):
                     text += (StartPage.name + '已經獲得 ' + player[drop[0]].name + ' \n')
             text += ('戰鬥結束，' + Fighter.name + '倒下了\n')
             break
-        text += (str(Fighter.name) + '攻擊' + str(Player.name) + '造成' + str(Fighter.atk*(1 - (Player.defend/1000))) + '傷害\n')
-        Player.hp -= Fighter.atk*(1 - (Player.defend/1000))
+        b = random.randint(1,100)
+        if b <= int(100*Fighter.prob):
+            av = random.randint(1,100)
+            if av <= int(Player.miss*100):
+                text += (str(Fighter.name) + ':' + str(Fighter.skill) + '!\n'+'但沒有成功命中\n')
+            else:
+                text += (str(Fighter.name) + ':' + str(Fighter.skill) + '!\n' + str(Player.name) + '受到' + str(2*Player.atk*(1 - (Fighter.defend/1000))) + '傷害\n')
+                Player.hp -= 2*Fighter.atk*(1 - (Player.defend/1000))
+        else:
+            av = random.randint(1,100)
+            if av <= int(Player.miss*100):
+                text += (str(Fighter.name)+'攻擊' + str(Player.name)+'但沒有成功命中\n')
+            else:
+                text += (str(Fighter.name) + '攻擊' + str(Player.name) + '造成' + str(Fighter.atk*(1 - (Player.defend/1000))) + '傷害\n')
+                Player.hp -= Fighter.atk*(1 - (Player.defend/1000))
         if Player.hp <= 0 and Fighter.hp > 0:
             text += ('戰鬥結束，' + Player.name + '倒下了\n')
             break
@@ -128,7 +156,7 @@ class Fighter():
     expDrop = boss[b_index].expDrop
     choose = boss[b_index].choose  # 檔案還沒有
     fight = boss[b_index].fight
-
+    prob = boss[b_index].prob
 def Chr_Obatin(index):
     if  player[index].obtained != 1:
         player[index].obtained = 1
@@ -416,7 +444,7 @@ class ChooseCharacter(tk.Frame):
         if Player.index == index:  #不知道為甚麼我不能直接用p_index
             tkinter.messagebox.showinfo('您目前為該角色', '你別想重製你的角色浪費時間')
         else:
-            response = messagebox.askokcancel("選擇角色", "即將選擇角色" + str(index) + "?\n當前的角色進度會被保存")
+            response = messagebox.askokcancel("選擇角色", "即將選擇" + player[index].name + "?\n當前的角色進度會被保存")
             if response == True:
                 if player[index].obtained == 1:
                     player[Player.index].name = Player.name
@@ -674,8 +702,10 @@ class Fight(tk.Frame):
         if Player.lv <= len(player[p_index].maxexp):  #處理升等
             exp = 0
             if Player.hp > 0:
-                Player.exp += int(Fighter.expDrop/10)
-                exp = int(Fighter.expDrop/10)
+                exp = int(Fighter.expDrop/10) - int((Player.lv - Fighter.minLv)*Fighter.expDrop/100)
+                if exp < 0:
+                    exp = 0
+                Player.exp += exp
             if Player.exp >= player[p_index].maxexp[Player.lv-1]:
                 Player.lv += 1
                 if Player.lv <= len(player[p_index].maxexp):
