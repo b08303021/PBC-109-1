@@ -349,7 +349,7 @@ class Level(tk.Frame):
             Fighter.words = boss[b_index].words
             Fighter.minLv = boss[b_index].minLv
             Fighter.expDrop = boss[b_index].expDrop
-            file = player[b_index].file  # 檔案還沒有
+            Fighter.fight = boss[b_index].fight  # 檔案還沒有
             self.toBoss()
         elif response == False:
             pass
@@ -381,14 +381,14 @@ class ChooseCharacter(tk.Frame):
         self.lblChooseChr = tk.Label(self, text="選擇角色", height=1, width=8, bg='white', font=('KaiTi', 30))
         self.lblChr1 = tk.Label(self, text="  管中閔", height=1, bg='white', font=f)
         self.lblChr2 = tk.Label(self, text=" Ricardo\nMilos", height=2, bg='white', font=f)
-        self.lblChr3 = tk.Label(self, text="  Chr3", height=1, width=7, bg='white', font=f)
-        self.lblChr4 = tk.Label(self, text="  Chr4", height=1, width=7, bg='white', font=f)
+        self.lblChr3 = tk.Label(self, text="  高爾宣", height=1, width=7, bg='white', font=f)
+        self.lblChr4 = tk.Label(self, text="  史丹利", height=1, width=7, bg='white', font=f)
         self.lblChr5 = tk.Label(self, text=" 小熊維尼", height=1, bg='white', font=f)
-        self.lblChr6 = tk.Label(self, text="  Chr6", height=1, width=7, bg='white', font=f)
-        self.lblChr7 = tk.Label(self, text="  Chr7", height=1, width=7, bg='white', font=f)
+        self.lblChr6 = tk.Label(self, text="  鍾佳播", height=1, width=7, bg='white', font=f)
+        self.lblChr7 = tk.Label(self, text="  亞洲\n統神", height=2, width=7, bg='white', font=f)
         self.lblChr8 = tk.Label(self, text="  至尊寶", height=1, width=7, bg='white', font=f)
         self.lblChr9 = tk.Label(self, text="  王希銘", height=1, width=7, bg='white', font=f)
-        self.lblChr10 = tk.Label(self, text="  Chr10", height=1, width=7, bg='white', font=f)
+        self.lblChr10 = tk.Label(self, text="  國動", height=1, width=7, bg='white', font=f)
 
         #  建立按鈕
         self.btnBack = tk.Button(self, text="返回", height=1, width=6, font=('KaiTi', 30), bg='#00E3E3', command=self.toGame)
@@ -610,50 +610,52 @@ class Boss(tk.Frame):
         pLevel = Player.lv  # 會隨上場角色更動所以分開寫
         self.level = tk.Label(self, text=("Lv.", pLevel), font=fSize2)  # 角色等級
         self.level.grid(row=2, column=1, sticky=tk.SW)
+        self.min_lv = tk.Label(self, text=('建議挑戰等級:Lv.', Fighter.minLv), font=fSize2)
+        self.min_lv.grid(row=0, column=3, sticky=tk.SE)
         # def __init__(self, name, hp, atk, level, defend, skill, miss, skilltype):
         pInfo = [Player.hp, Player.atk, Player.defend, Player.skill, Player.miss]  # 玩家角色資訊[血量,攻擊,防禦,技能,閃避]
         bInfo = [Fighter.hp, Fighter.atk, Fighter.defend, Fighter.skill, Fighter.miss]  # Boss角色資訊[血量,攻擊,防禦,技能,閃避]
 
-        self.hp = tk.Label(self, text="－ －血量－ －", height=2, font=fSize2, bg='yellow')
+        self.hp = tk.Label(self, text="－ －血量－ －", height=2, font=fSize2, bg='#FFFFCC')
         self.hp.grid(row=4, column=1, columnspan=2)
-        self.p_hp = tk.Label(self, text=str(pInfo[0]), height=2, font=fSize2, bg='yellow')
+        self.p_hp = tk.Label(self, text=str(pInfo[0]), height=2, font=fSize2, bg='#FFFFCC')
         self.p_hp.grid(row=4, column=0)
-        self.b_hp = tk.Label(self, text=str(bInfo[0]), height=2, font=fSize2, bg='yellow')
+        self.b_hp = tk.Label(self, text=str(bInfo[0]), height=2, font=fSize2, bg='#FFFFCC')
         self.b_hp.grid(row=4, column=3)
 
-        self.atk = tk.Label(self, text="－ －攻擊－ －", height=2, font=fSize2, bg='yellow')
+        self.atk = tk.Label(self, text="－ －攻擊－ －", height=2, font=fSize2, bg='#FFFFCC')
         self.atk.grid(row=5, column=1, columnspan=2)
-        self.p_atk = tk.Label(self, text=str(pInfo[1]), height=2, font=fSize2, bg='yellow')
+        self.p_atk = tk.Label(self, text=str(pInfo[1]), height=2, font=fSize2, bg='#FFFFCC')
         self.p_atk.grid(row=5, column=0)
-        self.b_atk = tk.Label(self, text=str(bInfo[1]), height=2, font=fSize2, bg='yellow')
+        self.b_atk = tk.Label(self, text=str(bInfo[1]), height=2, font=fSize2, bg='#FFFFCC')
         self.b_atk.grid(row=5, column=3)
 
-        self.defend = tk.Label(self, text="－ －防禦－ －", height=2, font=fSize2, bg='yellow')
+        self.defend = tk.Label(self, text="－ －防禦－ －", height=2, font=fSize2, bg='#FFFFCC')
         self.defend.grid(row=6, column=1, columnspan=2)
-        self.p_defend = tk.Label(self, text=str(pInfo[2]), height=2, font=fSize2, bg='yellow')
+        self.p_defend = tk.Label(self, text=str(pInfo[2]), height=2, font=fSize2, bg='#FFFFCC')
         self.p_defend.grid(row=6, column=0)
-        self.b_defend = tk.Label(self, text=str(bInfo[2]), height=2, font=fSize2, bg='yellow')
+        self.b_defend = tk.Label(self, text=str(bInfo[2]), height=2, font=fSize2, bg='#FFFFCC')
         self.b_defend.grid(row=6, column=3)
 
-        self.skill = tk.Label(self, text="－ －技能－ －", height=2, font=fSize2, bg='yellow')
+        self.skill = tk.Label(self, text="－ －技能－ －", height=2, font=fSize2, bg='#FFFFCC')
         self.skill.grid(row=7, column=1, columnspan=2)
-        self.p_skill = tk.Label(self, text=str(pInfo[3]), height=2, font=fSize2, bg='yellow')
+        self.p_skill = tk.Label(self, text=str(pInfo[3]), height=2, font=fSize2, bg='#FFFFCC')
         self.p_skill.grid(row=7, column=0)
-        self.b_skill = tk.Label(self, text=str(bInfo[3]), height=2, font=fSize2, bg='yellow')
+        self.b_skill = tk.Label(self, text=str(bInfo[3]), height=2, font=fSize2, bg='#FFFFCC')
         self.b_skill.grid(row=7, column=3)
 
-        self.miss = tk.Label(self, text="－ －閃避－ －", height=2, font=fSize2, bg='yellow')
+        self.miss = tk.Label(self, text="－ －閃避－ －", height=2, font=fSize2, bg='#FFFFCC')
         self.miss.grid(row=8, column=1, columnspan=2)
-        self.p_miss = tk.Label(self, text=str(pInfo[4]), height=2, font=fSize2, bg='yellow')
+        self.p_miss = tk.Label(self, text=str(pInfo[4]), height=2, font=fSize2, bg='#FFFFCC')
         self.p_miss.grid(row=8, column=0)
-        self.b_miss = tk.Label(self, text=str(bInfo[4]), height=2, font=fSize2, bg='yellow')
+        self.b_miss = tk.Label(self, text=str(bInfo[4]), height=2, font=fSize2, bg='#FFFFCC')
         self.b_miss.grid(row=8, column=3)
 
         fSize3 = tkFont.Font(size=20)
         self.btnBack = tk.Button(self, text="返回", height=2, width=8, bg='#00E3E3', font=fSize3, command=self.toLevel)  # 暫定返回鍵
         self.btnBack.grid(row=0, column=0, sticky=tk.NW)
 
-        self.btnFight = tk.Button(self, text="戰  鬥", height=1, width=10, font=fSize1, bg='#FF5151', command=self.toFight)  # 暫定戰鬥鍵
+        self.btnFight = tk.Button(self, text="戰  鬥", height=1, width=10, font=fSize1, bg='#FF6666', command=self.toFight)  # 暫定戰鬥鍵
         self.btnFight.grid(row=9, column=1, columnspan=2)
 
 
