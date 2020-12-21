@@ -35,7 +35,7 @@ class Chr:
         self.atk = int(atk)
         self.defend = int(defend)
         self.skill = skill
-        self.miss = miss
+        self.miss = float(miss)
         self.file = file
         self.obtained = int(obtained)  # 0 or 1
 
@@ -55,7 +55,7 @@ class Bos:
         self.hp = int(hp)
         self.atk = int(atk)
         self.defend = int(defend)
-        self.miss = miss
+        self.miss = float(miss)
         self.minLv = int(minLv)
         self.expDrop = int(expDrop)
 
@@ -188,7 +188,7 @@ class Game(tk.Frame):
         self.attack = tk.Button(self, text = "攻擊：" + str(Player.atk), height = 1, width = 15, bg='#ccdd69', font =f3, anchor='w').place(x = 60, y = 480)
         self.defend = tk.Button(self, text = "防禦：" + str(Player.defend), height = 1, width = 15, bg='#ccdd69', font =f3, anchor='w').place(x = 400, y = 360)
         self.skill = tk.Button(self, text = "技能：" + str(Player.skill), height = 1, width = 15, bg='#ccdd69', font =f3, anchor='w').place(x = 400, y = 420)
-        self.dodge = tk.Button(self, text = "閃避：" + str(Player.miss), height = 1, width = 15, font =f3, bg='#ccdd69', anchor='w').place(x = 400, y = 480)
+        self.dodge = tk.Button(self, text = "閃避：" + str(Player.miss*100) + "%", height = 1, width = 15, font =f3, bg='#ccdd69', anchor='w').place(x = 400, y = 480)
         # 角色名和自己的名稱
         self.charater_name = tk.Label(self, text = Player.name, height = 1, width = 10, bg = 'white', font =f1).place(x = 420 , y = 100)
         self.name = tk. Label(self, text = StartPage.name, height = 1, width = 10, bg = 'white', font =f2).place(x = 80 , y = 310)
