@@ -10,8 +10,8 @@ import math
 import csv
 import random
 
-o_list = [2, 3, 4, 8]
-o_list2 = [1, 5, 6, 7, 9]
+catch_list = [1, 2, 3, 7]
+drup_list = [4, 5, 6, 8, 9]
 
 p_index = 0  # 玩家選擇的角色編號
 b_index = 5  # 玩家選擇要打的Boss編號
@@ -72,19 +72,19 @@ for b in bData:
 # 戰鬥
 def Battle(Player, Fighter, b_index):
     text = ''
-    b_list = [1, 2, 4, 6, 8]
+    level_list = [0, 1, 3, 5, 7]  # 會掉落角色的關卡
     while Player.hp > 0 and Fighter.hp > 0:
         text += (str(Player.name) + '攻擊' + str(Fighter.name) + '造成' + str(Player.atk*(1 - (Fighter.defend/1000))) + '傷害\n')
         Fighter.hp -= Player.atk*(1 - (Fighter.defend/1000))
         if Fighter.hp <= 0 and Player.hp > 0:
-            if (len(b_list) > 0) and (b_index in b_list):
+            if (len(level_list) > 0) and (b_index in level_list):  # 掉落角色
                 a = random.randint(0,99)
                 if a <= 100:
-                    z = random.sample(o_list2, 1)
-                    player[z[0]].obtained = 1
-                    o_list2.remove(z[0])
-                    b_list.remove(b_index)
-                    self.write(StartPage.name + '已經獲得 ' + player[z[0]].name + ' \n')
+                    drop = random.sample(drop_list, 1)
+                    player[drop[0]].obtained = 1
+                    drop_list.remove(drop[0])
+                    level_list.remove(b_index)
+                    self.write(StartPage.name + '已經獲得 ' + player[drop[0]].name + ' \n')
             text += ('戰鬥結束，' + Fighter.name + '倒下了\n')
             break
         text += (str(Fighter.name) + '攻擊' + str(Player.name) + '造成' + str(Fighter.atk*(1 - (Player.defend/1000))) + '傷害\n')
@@ -240,16 +240,16 @@ class Level(tk.Frame):
         f1 = tkFont.Font(size = 32, family = "Courier New")
         f2 = tkFont.Font(size = 20, family = "Courier New")
 
-        self.lbl1 = tk.Label(self, text = "水源阿伯", height = 1, width = 7, font = f2)
-        self.lbl2 = tk.Label(self, text = "馬保國", height = 1, width = 7, font = f2)
-        self.lbl3 = tk.Label(self, text = "傑哥", height = 1, width = 7, font = f2)
-        self.lbl4 = tk.Label(self, text = "柯P", height = 1, width = 7, font = f2)
-        self.lbl5 = tk.Label(self, text = "鋼鐵韓粉", height = 1, width = 7, font = f2)
-        self.lbl6 = tk.Label(self, text = "國動", height = 1, width = 7, font = f2)
-        self.lbl7 = tk.Label(self, text = "統神", height = 1, width = 7, font = f2)
-        self.lbl8 = tk.Label(self, text = "小熊維尼", height = 1, width = 7, font = f2)
-        self.lbl9 = tk.Label(self, text = "鍾家播", height = 1, width = 7, font = f2)
-        self.lbl10 = tk.Label(self, text = "王希銘", height = 1, width = 7, font = f2)
+        self.lbl1 = tk.Label(self, text = "小熊維尼", height = 1, width = 7, font = f2)
+        self.lbl2 = tk.Label(self, text = "鐘佳播", height = 1, width = 7, font = f2)
+        self.lbl3 = tk.Label(self, text = "柯P", height = 1, width = 7, font = f2)
+        self.lbl4 = tk.Label(self, text = "亞洲統神", height = 1, width = 7, font = f2)
+        self.lbl5 = tk.Label(self, text = "傑哥", height = 1, width = 7, font = f2)
+        self.lbl6 = tk.Label(self, text = "霸主", height = 1, width = 7, font = f2)
+        self.lbl7 = tk.Label(self, text = "鋼鐵韓粉", height = 1, width = 7, font = f2)
+        self.lbl8 = tk.Label(self, text = "國動", height = 1, width = 7, font = f2)
+        self.lbl9 = tk.Label(self, text = "馬保國", height = 1, width = 7, font = f2)
+        self.lbl10 = tk.Label(self, text = "水源阿伯", height = 1, width = 7, font = f2)
         self.level = tk.Label(self, text="選擇關卡", height = 1, width = 7, font = f1)
         
         self.image1 = ImageTk.PhotoImage(file = "1.jpg")
@@ -487,13 +487,13 @@ class Action(tk.Frame):
     def actiontext(self, act):
         if Action.cantrigger == True:
             self.cooldown(0)
-            if len(o_list) > 0:
+            if len(catch_list) > 0:  # 行動獲得角色
                 a = random.randint(0,99)
                 if a <= 100:
-                    z = random.sample(o_list, 1)
-                    player[z[0]].obtained = 1
-                    o_list.remove(z[0])
-                    self.write(StartPage.name + '已經獲得 ' + player[z[0]].name + ' \n')
+                    catch = random.sample(catch_list, 1)  # 獲得編號
+                    player[catch[0]].obtained = 1
+                    catch_list.remove(catch[0])
+                    self.write(StartPage.name + '獲得了 ' + player[catch[0]].name + ' \n')
             if Player.lv <= len(player[p_index].maxexp):  #處理升等
                 Player.exp += 11
                 if Player.exp >= player[p_index].maxexp[Player.lv-1]:
