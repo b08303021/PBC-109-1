@@ -11,7 +11,7 @@ import csv
 import random
 
 catch_list = [1, 2, 3, 7]
-drup_list = [4, 5, 6, 8, 9]
+drop_list = [4, 5, 6, 8, 9]
 
 p_index = 0  # 玩家選擇的角色編號
 b_index = 5  # 玩家選擇要打的Boss編號
@@ -69,10 +69,11 @@ boss = []
 for b in bData:
     boss.append(Bos(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], b[8]))
 
+level_list = [0, 1, 3, 5, 7]  # 會掉落角色的關卡
+
 # 戰鬥
 def Battle(Player, Fighter, b_index):
     text = ''
-    level_list = [0, 1, 3, 5, 7]  # 會掉落角色的關卡
     while Player.hp > 0 and Fighter.hp > 0:
         text += (str(Player.name) + '攻擊' + str(Fighter.name) + '造成' + str(Player.atk*(1 - (Fighter.defend/1000))) + '傷害\n')
         Fighter.hp -= Player.atk*(1 - (Fighter.defend/1000))
@@ -84,7 +85,7 @@ def Battle(Player, Fighter, b_index):
                     player[drop[0]].obtained = 1
                     drop_list.remove(drop[0])
                     level_list.remove(b_index)
-                    self.write(StartPage.name + '已經獲得 ' + player[drop[0]].name + ' \n')
+                    text += (StartPage.name + '已經獲得 ' + player[drop[0]].name + ' \n')
             text += ('戰鬥結束，' + Fighter.name + '倒下了\n')
             break
         text += (str(Fighter.name) + '攻擊' + str(Player.name) + '造成' + str(Fighter.atk*(1 - (Player.defend/1000))) + '傷害\n')
