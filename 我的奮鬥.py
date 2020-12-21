@@ -11,6 +11,7 @@ import csv
 import random
 
 o_list = [2, 3, 4, 8]
+o_list2 = [1, 5, 6, 7, 9]
 
 p_index = 0  # 玩家選擇的角色編號
 b_index = 5  # 玩家選擇要打的Boss編號
@@ -67,12 +68,21 @@ for b in bData:
     boss.append(Bos(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]))
 
 # 戰鬥
-def Battle(Player, Fighter):
+def Battle(Player, Fighter, b_index):
     text = ''
+    b_list = [1, 2, 4, 6, 8]
     while Player.hp > 0 and Fighter.hp > 0:
         text += (str(Player.name) + '攻擊' + str(Fighter.name) + '造成' + str(Player.atk*(1 - (Fighter.defend/1000))) + '傷害\n')
         Fighter.hp -= Player.atk*(1 - (Fighter.defend/1000))
         if Fighter.hp <= 0 and Player.hp > 0:
+            if (len(b_list) > 0) and (b_index in b_list):
+                a = random.randint(0,99)
+                if a <= 100:
+                    z = random.sample(o_list, 1)
+                    player[z[0]].obtained = 1
+                    o_list1.remove(z[0])
+                    b_list.remove(b_index)
+                    self.write(StartPage.name + '已經獲得 ' + player[z[0]].name + ' \n')
             text += ('戰鬥結束，' + Fighter.name + '倒下了\n')
             break
         text += (str(Fighter.name) + '攻擊' + str(Player.name) + '造成' + str(Fighter.atk*(1 - (Player.defend/1000))) + '傷害\n')
@@ -648,7 +658,7 @@ class Fight(tk.Frame):
 
     def actiontext(self):
         inithp = [Player.hp, Fighter.hp]
-        self.write(Battle(Player, Fighter) + '\n')
+        self.write(Battle(Player, Fighter, b_index) + '\n')
         if Player.lv <= len(player[p_index].maxexp):  #處理升等
             earnedexp = 0
             if Player.hp > 0:
