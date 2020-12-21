@@ -53,9 +53,9 @@ for p in pData:
 
 
 class Bos:
-    def __init__(self, name, fight, hp, atk, defend, miss, minLv, expDrop):
+    def __init__(self, name, words, hp, atk, defend, miss, minLv, expDrop):
         self.name = name
-        self.fight = fight
+        self.words = words
         self.hp = int(hp)
         self.atk = int(atk)
         self.defend = int(defend)
@@ -108,16 +108,16 @@ class Player():
         
 # 玩家選擇的BOSS數值
 class Fighter():
-    name = player[b_index].name
-    hp = player[b_index].hp
-    atk = player[b_index].atk
-    defend = player[b_index].defend
-    skill = player[b_index].skill
-    miss = player[b_index].miss
-    words = player[b_index].words
-    lv = player[b_index].lv
-    exp = player[b_index].exp
-    file = player[b_index].file
+    name = boss[b_index].name
+    hp = boss[b_index].hp
+    atk = boss[b_index].atk
+    defend = boss[b_index].defend
+    skill = player[b_index].skill  # 檔案還沒有
+    miss = boss[b_index].miss
+    words = boss[b_index].words
+    minLv = boss[b_index].minLv
+    expDrop = boss[b_index].expDrop
+    file = player[b_index].file  # 檔案還沒有
 
 def Chr_Obatin(index):
     if  player[index].obtained != 1:
@@ -301,16 +301,16 @@ class Level(tk.Frame):
         response = messagebox.askokcancel("進入關卡", "即將進入關卡？")
         if response == True:
             b_index = num
-            Fighter.name = player[b_index].name
-            Fighter.hp = player[b_index].hp
-            Fighter.atk = player[b_index].atk
-            Fighter.defend = player[b_index].defend
-            Fighter.skill = player[b_index].skill
-            Fighter.miss = player[b_index].miss
-            Fighter.words = player[b_index].words
-            Fighter.lv = player[b_index].lv
-            Fighter.exp = player[b_index].exp
-            Fighter.file = player[b_index].file
+            Fighter.name = boss[b_index].name
+            Fighter.hp = boss[b_index].hp
+            Fighter.atk = boss[b_index].atk
+            Fighter.defend = boss[b_index].defend
+            Fighter.skill = player[b_index].skill  # 檔案還沒有
+            Fighter.miss = boss[b_index].miss
+            Fighter.words = boss[b_index].words
+            Fighter.minLv = boss[b_index].minLv
+            Fighter.expDrop = boss[b_index].expDrop
+            file = player[b_index].file  # 檔案還沒有
             self.toBoss()
         elif response == False:
             pass
