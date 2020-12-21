@@ -8,6 +8,9 @@ from functools import partial
 import threading
 import math
 import csv
+import random
+
+o_list = [2, 3, 4, 8]
 
 p_index = 0  # 玩家選擇的角色編號
 b_index = 5  # 玩家選擇要打的Boss編號
@@ -42,7 +45,7 @@ class Chr:
     def add_exp(self, x):
         self.exp += x
 
-    maxexp = [50, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]  # maxexp[x] 為第x+1等的最大經驗
+    maxexp = [10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,310,320,330,340,350,360,370,380,390,400,410,420,430,440,450,460,470,480,490,500,510,520,530,540,550,560,570,580,590]  # maxexp[x] 為第x+1等的最大經驗
 player = []
 for p in pData:
     player.append(Chr(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9], p[10]))
@@ -472,6 +475,13 @@ class Action(tk.Frame):
     def actiontext(self, act):
         if Action.cantrigger == True:
             self.cooldown(0)
+            if len(o_list) > 0:
+                a = random.randint(0,99)
+                if a <= 100:
+                    z = random.sample(o_list, 1)
+                    player[z[0]].obtained = 1
+                    o_list.remove(z[0])
+                    self.write(StartPage.name + '已經獲得 ' + player[z[0]].name + ' \n')
             if Player.lv <= len(player[p_index].maxexp):  #處理升等
                 Player.exp += 11
                 if Player.exp >= player[p_index].maxexp[Player.lv-1]:
@@ -480,7 +490,11 @@ class Action(tk.Frame):
                         Player.exp -= player[Player.index].maxexp[Player.lv - 2]
                     else:
                         Player.exp = player[p_index].maxexp[len(player[p_index].maxexp)-1]
-                    Player.atk += 10  #未完成
+                        Player.atk += 25
+                        Player.defend += 23
+                        Player.hp += 33
+                        if Player.lv % 3 == 1:
+                            Player.miss += 0.01
                     self.write('已成功行動'+ str(act) + '獲得' + str(11) + '點經驗並升級為' + str(Player.lv) + '等\n')
                 else:
                     self.write('已成功行動'+ str(act) + '獲得' + str(11) + '點經驗\n')
@@ -646,7 +660,11 @@ class Fight(tk.Frame):
                     Player.exp -= player[Player.index].maxexp[Player.lv - 2]
                 else:
                     Player.exp = player[p_index].maxexp[len(player[p_index].maxexp)-1]
-                Player.atk += 10  #角色成長未完成
+                    Player.atk += 25
+                    Player.defend += 23
+                    Player.hp += 33
+                    if Player.lv % 3 == 1:
+                        Player.miss += 0.01
                 self.write('獲得' + str(earnedexp) + '點經驗並升級為' + str(Player.lv) + '等')
             else:
                 self.write('獲得' + str(earnedexp) + '點經驗')
