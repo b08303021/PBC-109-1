@@ -53,7 +53,7 @@ for p in pData:
 
 
 class Bos:
-    def __init__(self, name, words, hp, atk, defend, miss, minLv, expDrop):
+    def __init__(self, name, words, hp, atk, defend, miss, minLv, expDrop, skill):
         self.name = name
         self.words = words
         self.hp = int(hp)
@@ -62,6 +62,7 @@ class Bos:
         self.miss = float(miss)
         self.minLv = int(minLv)
         self.expDrop = int(expDrop)
+        self.skill = skill
 
 boss = []
 for b in bData:
@@ -78,9 +79,9 @@ def Battle(Player, Fighter, b_index):
             if (len(b_list) > 0) and (b_index in b_list):
                 a = random.randint(0,99)
                 if a <= 100:
-                    z = random.sample(o_list, 1)
+                    z = random.sample(o_list2, 1)
                     player[z[0]].obtained = 1
-                    o_list1.remove(z[0])
+                    o_list2.remove(z[0])
                     b_list.remove(b_index)
                     self.write(StartPage.name + '已經獲得 ' + player[z[0]].name + ' \n')
             text += ('戰鬥結束，' + Fighter.name + '倒下了\n')
@@ -112,7 +113,7 @@ class Fighter():
     hp = boss[b_index].hp
     atk = boss[b_index].atk
     defend = boss[b_index].defend
-    skill = player[b_index].skill  # 檔案還沒有
+    skill = boss[b_index].skill  # 檔案還沒有
     miss = boss[b_index].miss
     words = boss[b_index].words
     minLv = boss[b_index].minLv
@@ -305,7 +306,7 @@ class Level(tk.Frame):
             Fighter.hp = boss[b_index].hp
             Fighter.atk = boss[b_index].atk
             Fighter.defend = boss[b_index].defend
-            Fighter.skill = player[b_index].skill  # 檔案還沒有
+            Fighter.skill = boss[b_index].skill  # 檔案還沒有
             Fighter.miss = boss[b_index].miss
             Fighter.words = boss[b_index].words
             Fighter.minLv = boss[b_index].minLv
@@ -498,13 +499,13 @@ class Action(tk.Frame):
                     Player.lv += 1
                     if Player.lv <= len(player[p_index].maxexp):
                         Player.exp -= player[Player.index].maxexp[Player.lv - 2]
-                    else:
-                        Player.exp = player[p_index].maxexp[len(player[p_index].maxexp)-1]
                         Player.atk += 25
                         Player.defend += 23
                         Player.hp += 33
                         if Player.lv % 3 == 1:
                             Player.miss += 0.01
+                    else:
+                        Player.exp = player[p_index].maxexp[len(player[p_index].maxexp)-1]
                     self.write('已成功行動'+ str(act) + '獲得' + str(11) + '點經驗並升級為' + str(Player.lv) + '等\n')
                 else:
                     self.write('已成功行動'+ str(act) + '獲得' + str(11) + '點經驗\n')
@@ -668,13 +669,13 @@ class Fight(tk.Frame):
                 Player.lv += 1
                 if Player.lv <= len(player[p_index].maxexp):
                     Player.exp -= player[Player.index].maxexp[Player.lv - 2]
-                else:
-                    Player.exp = player[p_index].maxexp[len(player[p_index].maxexp)-1]
                     Player.atk += 25
                     Player.defend += 23
                     Player.hp += 33
                     if Player.lv % 3 == 1:
                         Player.miss += 0.01
+                else:
+                    Player.exp = player[p_index].maxexp[len(player[p_index].maxexp)-1]
                 self.write('獲得' + str(earnedexp) + '點經驗並升級為' + str(Player.lv) + '等')
             else:
                 self.write('獲得' + str(earnedexp) + '點經驗')
