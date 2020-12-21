@@ -30,7 +30,7 @@ with open('boss.csv', newline='') as f:
 
 # 紀錄角色最初數值
 class Chr:
-    def __init__(self, name, words, exp, lv, hp, atk, defend, skill, miss, file, obtained):
+    def __init__(self, name, words, exp, lv, hp, atk, defend, skill, miss, file, obtained, choose, fight):
         self.name = name
         self.words = words
         self.exp = int(exp)
@@ -42,6 +42,8 @@ class Chr:
         self.miss = float(miss)
         self.file = file
         self.obtained = int(obtained)  # 0 or 1
+        self.choose = choose
+        self.fight = fight
 
     def add_exp(self, x):
         self.exp += x
@@ -49,12 +51,12 @@ class Chr:
     maxexp = [10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,310,320,330,340,350,360,370,380,390,400,410,420,430,440,450,460,470,480,490,500,510,520,530,540,550,560,570,580,590]  # maxexp[x] 為第x+1等的最大經驗
 player = []
 for p in pData:
-    player.append(Chr(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9], p[10]))
+    player.append(Chr(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], p[8], p[9], p[10], p[11], p[12]))
 
 
 
 class Bos:
-    def __init__(self, name, words, hp, atk, defend, miss, minLv, expDrop, skill):
+    def __init__(self, name, words, hp, atk, defend, miss, minLv, expDrop, skill, choose, fight):
         self.name = name
         self.words = words
         self.hp = int(hp)
@@ -64,10 +66,12 @@ class Bos:
         self.minLv = int(minLv)
         self.expDrop = int(expDrop)
         self.skill = skill
+        self.choose = choose
+        self.fight = fight
 
 boss = []
 for b in bData:
-    boss.append(Bos(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], b[8]))
+    boss.append(Bos(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7], b[8], b[9], b[10]))
 
 level_list = [0, 1, 3, 5, 7]  # 會掉落角色的關卡
 
@@ -108,7 +112,9 @@ class Player():
     exp = player[p_index].exp
     file = player[p_index].file
     index = p_index
-        
+    choose = player[p_index].choose
+    fight = player[p_index].fight
+    
 # 玩家選擇的BOSS數值
 class Fighter():
     name = boss[b_index].name
@@ -120,7 +126,8 @@ class Fighter():
     words = boss[b_index].words
     minLv = boss[b_index].minLv
     expDrop = boss[b_index].expDrop
-    file = player[b_index].file  # 檔案還沒有
+    choose = boss[b_index].choose  # 檔案還沒有
+    fight = boss[b_index].fight
 
 def Chr_Obatin(index):
     if  player[index].obtained != 1:
@@ -192,7 +199,8 @@ class Game(tk.Frame):
         f4 = tkFont.Font(size = 10, family = "Courier New")
         # 背景和圖片
         self.background = tk.Canvas(self, height = 600, width = 800, bg = 'white').pack()
-        self.picture = tk.Canvas(self, height = 240, width = 240, bg = 'blue').place(x = 60, y = 60)
+        self.image = ImageTk.PhotoImage(file=Player.file)
+        self.picture = tk.Label(self, image=self.image).place(x = 60, y = 60)
         # 經驗值
         if Player.lv <= len(player[p_index].maxexp):
             self.exp = tk.Label(self, text = (str(Player.exp) + '/' + str(player[p_index].maxexp[Player.lv-1])), height = 1, width = 12, bg = 'white', font = f3).place(x = 450, y = 290)
@@ -206,7 +214,7 @@ class Game(tk.Frame):
         self.skill = tk.Button(self, text = "技能：" + str(Player.skill), height = 1, width = 15, bg='#ccdd69', font =f3, anchor='w').place(x = 400, y = 420)
         self.dodge = tk.Button(self, text = "閃避：" + str(Player.miss*100) + "%", height = 1, width = 15, font =f3, bg='#ccdd69', anchor='w').place(x = 400, y = 480)
         # 角色名和自己的名稱
-        self.charater_name = tk.Label(self, text = Player.name, height = 1, width = 10, bg = 'white', font =f1).place(x = 420 , y = 100)
+        self.charater_name = tk.Label(self, text = Player.name, height = 1, bg = 'white', font =f1).place(x = 420 , y = 100)
         self.name = tk. Label(self, text = StartPage.name, height = 1, width = 10, bg = 'white', font =f2).place(x = 80 , y = 310)
         self.word = Player.words
         self.intro = tk.Message(self, text = self.word, font = f4, bg = 'white', width = 270).place(x = 400, y = 150)
@@ -253,16 +261,16 @@ class Level(tk.Frame):
         self.lbl10 = tk.Label(self, text = "水源阿伯", height = 1, width = 7, font = f2)
         self.level = tk.Label(self, text="選擇關卡", height = 1, width = 7, font = f1)
         
-        self.image1 = ImageTk.PhotoImage(file = "1.jpg")
-        self.image2 = ImageTk.PhotoImage(file = "2.jpg")
-        self.image3 = ImageTk.PhotoImage(file = "3.jpg")
-        self.image4 = ImageTk.PhotoImage(file = "4.jpg")
-        self.image5 = ImageTk.PhotoImage(file = "5.jpg")
-        self.image6 = ImageTk.PhotoImage(file = "6.jpg")
-        self.image7 = ImageTk.PhotoImage(file = "7.jpg")
-        self.image8 = ImageTk.PhotoImage(file = "8.jpg")
-        self.image9 = ImageTk.PhotoImage(file = "9.jpg")
-        self.image10 = ImageTk.PhotoImage(file = "10.jpg")
+        self.image1 = ImageTk.PhotoImage(file = boss[0].choose)
+        self.image2 = ImageTk.PhotoImage(file = boss[1].choose)
+        self.image3 = ImageTk.PhotoImage(file = boss[2].choose)
+        self.image4 = ImageTk.PhotoImage(file = boss[3].choose)
+        self.image5 = ImageTk.PhotoImage(file = boss[4].choose)
+        self.image6 = ImageTk.PhotoImage(file = boss[5].choose)
+        self.image7 = ImageTk.PhotoImage(file = boss[6].choose)
+        self.image8 = ImageTk.PhotoImage(file = boss[7].choose)
+        self.image9 = ImageTk.PhotoImage(file = boss[8].choose)
+        self.image10 = ImageTk.PhotoImage(file = boss[9].choose)
         
         self.back = tk.Button(self, text = "返回", width = 3, bg='#00E3E3', bd=1, font = ('KaiTi', 25), command = self.toGame)
         self.btn1 = tk.Button(self, image = self.image1, command = partial(self.check, 0), font = f2, height = 200, width = 150)
@@ -356,25 +364,25 @@ class ChooseCharacter(tk.Frame):
 
         #  建立按鈕
         self.btnBack = tk.Button(self, text="返回", height=1, width=6, font=('KaiTi', 30), bg='#00E3E3', command=self.toGame)
-        self.imageChr1 = ImageTk.PhotoImage(file="Chr1.png")
+        self.imageChr1 = ImageTk.PhotoImage(file=player[0].choose)
         self.btnChr1 = tk.Button(self, image=self.imageChr1, command=partial(self.clickBtnChr, 0), height=140, width=148)
-        self.imageChr2 = ImageTk.PhotoImage(file="Chr2.png")
+        self.imageChr2 = ImageTk.PhotoImage(file=player[1].choose)
         self.btnChr2 = tk.Button(self, image=self.imageChr2, command=partial(self.clickBtnChr, 1), height=140, width=148)
-        self.imageChr3 = ImageTk.PhotoImage(file="Chr3.png")
+        self.imageChr3 = ImageTk.PhotoImage(file=player[2].choose)
         self.btnChr3 = tk.Button(self, image=self.imageChr3, command=partial(self.clickBtnChr, 2), height=140, width=148)
-        self.imageChr4 = ImageTk.PhotoImage(file="Chr4.png")
+        self.imageChr4 = ImageTk.PhotoImage(file=player[3].choose)
         self.btnChr4 = tk.Button(self, image=self.imageChr4, command=partial(self.clickBtnChr, 3), height=140, width=148)
-        self.imageChr5 = ImageTk.PhotoImage(file="Chr5.png")
+        self.imageChr5 = ImageTk.PhotoImage(file=player[4].choose)
         self.btnChr5 = tk.Button(self, image=self.imageChr5, command=partial(self.clickBtnChr, 4), height=140, width=148)
-        self.imageChr6 = ImageTk.PhotoImage(file="Chr6.png")
+        self.imageChr6 = ImageTk.PhotoImage(file=player[5].choose)
         self.btnChr6 = tk.Button(self, image=self.imageChr6, command=partial(self.clickBtnChr, 5), height=140, width=148)
-        self.imageChr7 = ImageTk.PhotoImage(file="Chr7.png")
+        self.imageChr7 = ImageTk.PhotoImage(file=player[6].choose)
         self.btnChr7 = tk.Button(self, image=self.imageChr7, command=partial(self.clickBtnChr, 6), height=140, width=148)
-        self.imageChr8 = ImageTk.PhotoImage(file="Chr8.png")
+        self.imageChr8 = ImageTk.PhotoImage(file=player[7].choose)
         self.btnChr8 = tk.Button(self, image=self.imageChr8, command=partial(self.clickBtnChr, 7), height=140, width=148)
-        self.imageChr9 = ImageTk.PhotoImage(file="Chr9.png")
+        self.imageChr9 = ImageTk.PhotoImage(file=player[8].choose)
         self.btnChr9 = tk.Button(self, image=self.imageChr9, command=partial(self.clickBtnChr, 8), height=140, width=148)
-        self.imageChr10 = ImageTk.PhotoImage(file="Chr10.png")
+        self.imageChr10 = ImageTk.PhotoImage(file=player[9].choose)
         self.btnChr10 = tk.Button(self, image=self.imageChr10, command=partial(self.clickBtnChr, 9), height=140, width=148)
 
         # 設定位置
@@ -433,8 +441,8 @@ class ChooseCharacter(tk.Frame):
                     Player.lv = player[index].lv
                     Player.exp = player[index].exp
                     Player.file = player[index].file
-                    # 存檔
-                    
+                    Player.fight = player[index].fight
+
                     self.toGame()
                 else:
                     tkinter.messagebox.showinfo('錯誤', '您未擁有該角色')
@@ -552,13 +560,13 @@ class Boss(tk.Frame):
         self.bg.grid(row=1, column=0, columnspan=4)
 
     def createWidgets(self):
-        pFile = Player.file  # 注意檔案路徑，會隨上場角色更動所以分開寫
-        self.imageP = tk.PhotoImage(file=pFile)  # 注意檔案路徑
+        pFile = Player.fight  # 注意檔案路徑，會隨上場角色更動所以分開寫
+        self.imageP = ImageTk.PhotoImage(file=pFile)  # 注意檔案路徑
         self.pImage = tk.Label(self, image=self.imageP)  # 玩家角色圖
         self.pImage.grid(row=1, column=0, columnspan=2, sticky=tk.W)
 
-        bFile = Fighter.file  # 注意檔案路徑，會隨上場角色更動所以分開寫
-        self.imageB = tk.PhotoImage(file=bFile)  # 注意檔案路徑
+        bFile = Fighter.fight  # 注意檔案路徑，會隨上場角色更動所以分開寫
+        self.imageB = ImageTk.PhotoImage(file=bFile)  # 注意檔案路徑
         self.bImage = tk.Label(self, image=self.imageB)  # Boss角色名
         self.bImage.grid(row=1, column=2, columnspan=2, sticky=tk.E)
 
