@@ -399,7 +399,7 @@ class ChooseCharacter(tk.Frame):
     #  設定按鈕觸發事件
     def clickBtnChr(self, index):
         if Player.index == index:  #不知道為甚麼我不能直接用p_index
-            tkinter.messagebox.showinfo('您目前為該角色', '你別想重製你的角色輛費時間')
+            tkinter.messagebox.showinfo('您目前為該角色', '你別想重製你的角色浪費時間')
         else:
             response = messagebox.askokcancel("選擇角色", "即將選擇角色" + str(index) + "?\n當前的角色進度會被保存")
             if response == True:
