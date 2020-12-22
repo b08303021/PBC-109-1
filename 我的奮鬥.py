@@ -11,7 +11,6 @@ import csv
 import random
 
 catch_list = [1, 2, 3, 7]
-drop_list = [4, 5, 6, 8, 9]
 
 p_index = 0  # 玩家選擇的角色編號
 b_index = 5  # 玩家選擇要打的Boss編號
@@ -97,15 +96,23 @@ def Battle(Player, Fighter, b_index):
                     text += (str(Player.name) + '攻擊' + str(Fighter.name) + '造成' + str(Player.atk*(1 - (Fighter.defend/1000))) + '傷害\n')
                     Fighter.hp -= Player.atk*(1 - (Fighter.defend/1000))
         if Fighter.hp <= 0 and Player.hp > 0:
-            if (len(level_list) > 0) and (b_index in level_list):  # 掉落角色
-                a = random.randint(0,99)
-                if a <= 100:
-                    drop = random.sample(drop_list, 1)
-                    player[drop[0]].obtained = 1
-                    drop_list.remove(drop[0])
-                    level_list.remove(b_index)
-                    text += (StartPage.name + '已經獲得 ' + player[drop[0]].name + ' \n')
             text += ('戰鬥結束，' + Fighter.name + '倒下了\n')
+            if b_index in level_list:  # 掉落角色
+                a = random.randint(0,99)
+                if a <= 30:
+                    if b_index == 0:
+                        drop = 4
+                    elif b_index == 1:
+                        drop = 5
+                    elif b_index == 3:
+                        drop = 6
+                    elif b_index == 5:
+                        drop = 2
+                    elif b_index == 7:
+                        drop = 9
+                    player[drop].obtained = 1
+                    level_list.remove(b_index)
+                    text += (StartPage.name + '已經獲得 ' + player[drop].name + ' \n')
             break
         b = random.randint(1,100)
         if b <= int(100*Fighter.prob):
@@ -113,7 +120,7 @@ def Battle(Player, Fighter, b_index):
             if av <= int(Player.miss*100):
                 text += (str(Fighter.name) + ':' + str(Fighter.skill) + '!\n'+'但沒有成功命中\n')
             else:
-                text += (str(Fighter.name) + ':' + str(Fighter.skill) + '!\n' + str(Player.name) + '受到' + str(2*Player.atk*(1 - (Fighter.defend/1000))) + '傷害\n')
+                text += (str(Fighter.name) + ':' + str(Fighter.skill) + '!\n' + str(Player.name) + '受到' + str(1.3*Fighter.atk*(1 - (Player.defend/1000))) + '傷害\n')
                 Player.hp -= 2*Fighter.atk*(1 - (Player.defend/1000))
         else:
             av = random.randint(1,100)
@@ -523,7 +530,7 @@ class Action(tk.Frame):
 
     def actiontext(self, act):
         if Action.cantrigger == True:
-            self.cooldown(0)
+            self.cooldown(10)
             if len(catch_list) > 0:  # 行動獲得角色
                 a = random.randint(0,99)
                 if a <= 100:
@@ -641,7 +648,7 @@ class Boss(tk.Frame):
         self.skill.grid(row=7, column=1, columnspan=2)
         self.p_skill = tk.Label(self, text=str(pInfo[3]), height=2, font=fSize2, bg='#FFFFCC')
         self.p_skill.grid(row=7, column=0)
-        self.b_skill = tk.Label(self, text=str(bInfo[3]), height=2, font=fSize2, bg='#FFFFCC')
+        self.b_skill = tk.Label(self, text='???', height=2, font=fSize2, bg='#FFFFCC')
         self.b_skill.grid(row=7, column=3)
 
         self.miss = tk.Label(self, text="－ －閃避－ －", height=2, font=fSize2, bg='#FFFFCC')
