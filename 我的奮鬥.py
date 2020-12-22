@@ -120,7 +120,7 @@ def Battle(Player, Fighter, b_index):
             if av <= int(Player.miss*100):
                 text += (str(Fighter.name) + ':' + str(Fighter.skill) + '!\n'+'但沒有成功命中\n')
             else:
-                text += (str(Fighter.name) + ':' + str(Fighter.skill) + '!\n' + str(Player.name) + '受到' + str(1.3*Fighter.atk*(1 - (Player.defend/1000))) + '傷害\n')
+                text += (str(Fighter.name) + ':' + str(Fighter.skill) + '!\n' + str(Player.name) + '受到' + str(2*Fighter.atk*(1 - (Player.defend/1000))) + '傷害\n')
                 Player.hp -= 2*Fighter.atk*(1 - (Player.defend/1000))
         else:
             av = random.randint(1,100)
@@ -164,6 +164,7 @@ class Fighter():
     choose = boss[b_index].choose  # 檔案還沒有
     fight = boss[b_index].fight
     prob = boss[b_index].prob
+    index = b_index
 def Chr_Obatin(index):
     if  player[index].obtained != 1:
         player[index].obtained = 1
@@ -344,23 +345,20 @@ class Level(tk.Frame):
         self.btn10.grid(row = 3, column = 4, sticky = tk.NE + tk.SW)
 
     def check(self, num):
-        response = messagebox.askokcancel("進入關卡", "即將進入關卡？")
-        if response == True:
-            b_index = num
-            Fighter.name = boss[b_index].name
-            Fighter.hp = boss[b_index].hp
-            Fighter.atk = boss[b_index].atk
-            Fighter.defend = boss[b_index].defend
-            Fighter.skill = boss[b_index].skill
-            Fighter.miss = boss[b_index].miss
-            Fighter.words = boss[b_index].words
-            Fighter.minLv = boss[b_index].minLv
-            Fighter.expDrop = boss[b_index].expDrop
-            Fighter.fight = boss[b_index].fight
-            self.toBoss()
-        elif response == False:
-            pass
-        
+        b_index = num
+        Fighter.index = b_index
+        Fighter.name = boss[b_index].name
+        Fighter.hp = boss[b_index].hp
+        Fighter.atk = boss[b_index].atk
+        Fighter.defend = boss[b_index].defend
+        Fighter.skill = boss[b_index].skill
+        Fighter.miss = boss[b_index].miss
+        Fighter.words = boss[b_index].words
+        Fighter.minLv = boss[b_index].minLv
+        Fighter.expDrop = boss[b_index].expDrop
+        Fighter.fight = boss[b_index].fight
+        self.toBoss()
+
     def toGame(self):
         self.destroy()
         self.master.switch_frame(Game)
@@ -551,9 +549,9 @@ class Action(tk.Frame):
                             Player.miss += 0.01
                     else:
                         Player.exp = player[p_index].maxexp[len(player[p_index].maxexp)-1]
-                    self.write('已成功行動'+ str(act) + '獲得' + str(11) + '點經驗並升級為' + str(Player.lv) + '等\n')
+                    self.write('已成功行動'+ str(act) + '獲得' + str(20) + '點經驗並升級為' + str(Player.lv) + '等\n')
                 else:
-                    self.write('已成功行動'+ str(act) + '獲得' + str(11) + '點經驗\n')
+                    self.write('已成功行動'+ str(act) + '獲得' + str(20) + '點經驗\n')
             else:
                 self.write('已成功行動'+ str(act) + '，您已達到滿等\n')
         else:
@@ -707,7 +705,7 @@ class Fight(tk.Frame):
 
     def actiontext(self):
         inithp = [Player.hp, Fighter.hp]
-        self.write(Battle(Player, Fighter, b_index) + '\n')
+        self.write(Battle(Player, Fighter, Fighter.index) + '\n')
         if Player.lv <= len(player[p_index].maxexp):  #處理升等
             exp = 0
             if Player.hp > 0:
