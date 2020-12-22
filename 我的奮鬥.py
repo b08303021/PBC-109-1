@@ -529,7 +529,7 @@ class Action(tk.Frame):
 
     def actiontext(self, act):
         if Action.cantrigger == True:
-            self.cooldown(10)
+            self.cooldown(8)
             if len(catch_list) > 0:  # 行動獲得角色
                 a = random.randint(0,99)
                 if a <= 30:
@@ -542,7 +542,18 @@ class Action(tk.Frame):
                     elif act == '車禍':
                         Chr_Obatin(3)
             if Player.lv <= len(player[p_index].maxexp):  #處理升等
-                Player.exp += 20
+                if Player.lv <= 10:
+                    Player.exp += 20
+                elif 10 < Player.lv <= 20:
+                    Player.exp += 30
+                elif 20 < Player.lv <= 30:
+                    Player.exp += 40
+                elif 30 < Player.lv <= 40:
+                    Player.exp += 50
+                elif 40 < Player.lv <= 50:
+                    Player.exp += 60
+                else:
+                    Player.exp += 70
                 if Player.exp >= player[p_index].maxexp[Player.lv-1]:
                     Player.lv += 1
                     if Player.lv <= len(player[p_index].maxexp):
