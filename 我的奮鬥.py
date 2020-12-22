@@ -533,13 +533,13 @@ class Action(tk.Frame):
             self.cooldown(10)
             if len(catch_list) > 0:  # 行動獲得角色
                 a = random.randint(0,99)
-                if a <= 100:
+                if a <= 30:
                     catch = random.sample(catch_list, 1)  # 獲得編號
                     player[catch[0]].obtained = 1
                     catch_list.remove(catch[0])
                     self.write(StartPage.name + '獲得了 ' + player[catch[0]].name + ' \n')
             if Player.lv <= len(player[p_index].maxexp):  #處理升等
-                Player.exp += 11
+                Player.exp += 20
                 if Player.exp >= player[p_index].maxexp[Player.lv-1]:
                     Player.lv += 1
                     if Player.lv <= len(player[p_index].maxexp):
