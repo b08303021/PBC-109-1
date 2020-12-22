@@ -165,6 +165,7 @@ class Fighter():
     fight = boss[b_index].fight
     prob = boss[b_index].prob
     index = b_index
+
 def Chr_Obatin(index):
     if  player[index].obtained != 1:
         player[index].obtained = 1
@@ -508,14 +509,14 @@ class Action(tk.Frame):
         self.output.place(x = 35, y = 300)
         # 按鈕
         self.back = tk.Button(self, text = "返回", height = 1, width = 5, bg='#00E3E3', font = ('KaiTi', 30), command= self.toGame).place(x = 10, y = 0)
-        self.a = tk.Button(self, text = "A", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext, 'a')).place(x = 35, y = 120)
-        self.b = tk.Button(self, text = "B", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'b')).place(x = 220, y = 120)
-        self.c = tk.Button(self, text = "C", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'c')).place(x = 405, y = 120)
-        self.d = tk.Button(self, text = "D", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'d')).place(x = 590, y = 120)
-        self.e = tk.Button(self, text = "E", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'e')).place(x = 35, y = 220)
-        self.f = tk.Button(self, text = "F", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'f')).place(x = 220, y = 220)
-        self.g = tk.Button(self, text = "G", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'g')).place(x = 405, y = 220)
-        self.h = tk.Button(self, text = "H", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'h')).place(x = 590, y = 220)
+        self.a = tk.Button(self, text = "跳舞", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext, '跳舞')).place(x = 35, y = 120)
+        self.b = tk.Button(self, text = "改裝車子", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'改裝車子')).place(x = 220, y = 120)
+        self.c = tk.Button(self, text = "吃炸雞", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'吃炸雞')).place(x = 405, y = 120)
+        self.d = tk.Button(self, text = "車禍", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'車禍')).place(x = 590, y = 120)
+        self.e = tk.Button(self, text = "約浪漫", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'約浪漫')).place(x = 35, y = 220)
+        self.f = tk.Button(self, text = "放手騎車", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'放手騎車')).place(x = 220, y = 220)
+        self.g = tk.Button(self, text = "穿海灘褲", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'穿海灘褲')).place(x = 405, y = 220)
+        self.h = tk.Button(self, text = "抓頭", height = 1, width = 10, font = f3, bg='#228922', anchor='w', command=partial(self.actiontext,'抓頭')).place(x = 590, y = 220)
         # 標題
         self.title = tk.Label(self, text = "行動", height = 1, width = 10, bg = 'white', font = f1).place(x = 600 , y = 25)
         # CD
@@ -532,10 +533,14 @@ class Action(tk.Frame):
             if len(catch_list) > 0:  # 行動獲得角色
                 a = random.randint(0,99)
                 if a <= 30:
-                    catch = random.sample(catch_list, 1)  # 獲得編號
-                    player[catch[0]].obtained = 1
-                    catch_list.remove(catch[0])
-                    self.write(StartPage.name + '獲得了 ' + player[catch[0]].name + ' \n')
+                    if act == '跳舞':
+                        Chr_Obatin(1)
+                    elif act == '改裝車子':
+                        Chr_Obatin(2)
+                    elif act == '吃炸雞':
+                        Chr_Obatin(7)
+                    elif act == '車禍':
+                        Chr_Obatin(3)
             if Player.lv <= len(player[p_index].maxexp):  #處理升等
                 Player.exp += 20
                 if Player.exp >= player[p_index].maxexp[Player.lv-1]:
