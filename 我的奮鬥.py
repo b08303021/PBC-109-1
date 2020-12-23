@@ -185,7 +185,6 @@ def Chr_Obatin(index):
             tkinter.messagebox.showinfo('獲得角色', '您已獲得'+ player[index].name + '\n但受到不明力量影響，降低' + str(pns) + '點經驗')            
         else:
             tkinter.messagebox.showinfo('獲得角色', '您已獲得'+ player[index].name)
-    # 存檔
     
 class SampleApp(tk.Tk):
     def __init__(self):
@@ -545,13 +544,24 @@ class Action(tk.Frame):
     def actiontext(self, act):
         if Action.cantrigger == True:
             self.cooldown(8)
+            if len(catch_list) > 0:  # 行動獲得角色
+                a = random.randint(0,99)
+                if a <= 8:
+                    if act == '跳舞':
+                        Chr_Obatin(1)
+                    elif act == '改裝車子':
+                        Chr_Obatin(2)
+                    elif act == '吃炸雞':
+                        Chr_Obatin(7)
+                    elif act == '車禍':
+                        Chr_Obatin(3)
+            if act == '吃炸雞' or act == '車禍':
+                zzz = 20
+                Player.exp += 20
+            else:
+                zzz = 15
+                Player.exp += 15
             if Player.lv <= len(player[p_index].maxexp):  #處理升等
-                if act == '吃炸雞' or act == '車禍':
-                    zzz = 20
-                    Player.exp += 20
-                else:
-                    zzz = 15
-                    Player.exp += 15
                 if Player.exp >= player[p_index].maxexp[Player.lv-1]:
                     Player.lv += 1
                     if Player.lv <= len(player[p_index].maxexp):
@@ -568,17 +578,6 @@ class Action(tk.Frame):
                     self.write('已成功行動'+ str(act) + '獲得' + str(zzz) + '點經驗\n')
             else:
                 self.write('已成功行動'+ str(act) + '，您已達到滿等\n')
-            if len(catch_list) > 0:  # 行動獲得角色
-                a = random.randint(0,99)
-                if a <= 8:
-                    if act == '跳舞':
-                        Chr_Obatin(1)
-                    elif act == '改裝車子':
-                        Chr_Obatin(2)
-                    elif act == '吃炸雞':
-                        Chr_Obatin(7)
-                    elif act == '車禍':
-                        Chr_Obatin(3)    
         else:
             self.write('還在冷卻中\n')
 
