@@ -262,21 +262,21 @@ class Game(tk.Frame):
         else:
             self.exp = tk.Label(self, text=(str(Player.exp) + '/' + str(player[p_index].maxexp[Player.lv-2])), height=1, width=12, bg='white', font=f3).place(x=450, y=290)
         # 首頁基礎數值
-        self.level = tk.Button(self, text="等級：" + str(Player.lv), height=1, width=15, bg='#ccdd69', font=f3, anchor='w').place(x=60, y=360)
-        self.blood = tk.Button(self, text="血量：" + str(Player.hp), height=1, width=15, bg='#ccdd69', font=f3, anchor='w').place(x=60, y=420)
-        self.attack = tk.Button(self, text="攻擊：" + str(Player.atk), height=1, width=15, bg='#ccdd69', font=f3, anchor='w').place(x=60, y=480)
-        self.defend = tk.Button(self, text="防禦：" + str(Player.defend), height=1, width=15, bg='#ccdd69', font=f3, anchor='w').place(x=400, y=360)
-        self.skill = tk.Button(self, text="技能：" + str(Player.skill), height=1, width=15, bg='#ccdd69', font=f3, anchor='w').place(x=400, y=420)
-        self.dodge = tk.Button(self, text="閃避：" + str(Player.miss*100) + "%", height=1, width=15, font=f3, bg='#ccdd69', anchor='w').place(x=400, y=480)
+        self.level = tk.Button(self, text="等級：" + str(Player.lv), height=1, width=15, bg='#FFFF99', font=f3, anchor='w').place(x=60, y=360)
+        self.blood = tk.Button(self, text="血量：" + str(Player.hp), height=1, width=15, bg='#FFFF99', font=f3, anchor='w').place(x=60, y=420)
+        self.attack = tk.Button(self, text="攻擊：" + str(Player.atk), height=1, width=15, bg='#FFFF99', font=f3, anchor='w').place(x=60, y=480)
+        self.defend = tk.Button(self, text="防禦：" + str(Player.defend), height=1, width=15, bg='#FFFF99', font=f3, anchor='w').place(x=400, y=360)
+        self.skill = tk.Button(self, text="技能：" + str(Player.skill), height=1, width=15, bg='#FFFF99', font=f3, anchor='w').place(x=400, y=420)
+        self.dodge = tk.Button(self, text="閃避：" + str(Player.miss*100) + "%", height=1, width=15, font=f3, bg='#FFFF99', anchor='w').place(x=400, y=480)
         # 角色名和自己的名稱
         self.charater_name = tk.Label(self, text=Player.name, height=1, bg='white', font=f1).place(x=420, y=100)
         self.name = tk.Label(self, text=StartPage.name, height=1, width=10, bg='white', font=f2).place(x=80, y=310)
         self.word = Player.words
         self.intro = tk.Message(self, text=self.word, font=f4, bg='white', width=270).place(x=400, y=150)
         # 按鈕
-        self.boss = tk.Button(self, text="關\n卡", height=2, width=2, font=f3, bg='#bbaa69', command=self.toLevel).place(x=760, y=60)
-        self.character = tk.Button(self, text="角\n色", height=2, width=2, bg='#bbaa69', font=f3, command=self.toCharacter).place(x=760, y=180)
-        self.action = tk.Button(self, text="行\n動", height=2, width=2, font=f3, bg='#bbaa69', command=self.toAction).place(x=760, y=300)
+        self.boss = tk.Button(self, text="關\n卡", height=2, width=2, font=f3, bg='#CCCC00', command=self.toLevel).place(x=760, y=60)
+        self.character = tk.Button(self, text="角\n色", height=2, width=2, bg='#CCCC00', font=f3, command=self.toCharacter).place(x=760, y=180)
+        self.action = tk.Button(self, text="行\n動", height=2, width=2, font=f3, bg='#CCCC00', command=self.toAction).place(x=760, y=300)
 
     def toAction(self):
         self.destroy()
@@ -326,7 +326,7 @@ class Level(tk.Frame):
         self.image9 = ImageTk.PhotoImage(file=boss[8].choose)
         self.image10 = ImageTk.PhotoImage(file=boss[9].choose)
 
-        self.back = tk.Button(self, text="返回", width=3, bg='#00E3E3', bd=1, font=('KaiTi', 25), command=self.toGame)
+        self.back = tk.Button(self, text="返回", width=3, bg='#CCFFFF', bd=1, font=('KaiTi', 25), command=self.toGame)
         self.btn1 = tk.Button(self, image=self.image1, command=partial(self.check, 0), font=f2, height=200, width=150)
         self.btn2 = tk.Button(self, image=self.image2, command=partial(self.check, 1), font=f2, height=200, width=150)
         self.btn3 = tk.Button(self, image=self.image3, command=partial(self.check, 2), font=f2, height=200, width=150)
@@ -414,7 +414,7 @@ class ChooseCharacter(tk.Frame):
         self.lblChr10 = tk.Label(self, text="  國動", height=1, width=7, bg='white', font=f)
 
         #  建立按鈕
-        self.btnBack = tk.Button(self, text="返回", height=1, width=6, font=('KaiTi', 30), bg='#00E3E3', command=self.toGame)
+        self.btnBack = tk.Button(self, text="返回", height=1, width=6, font=('KaiTi', 30), bg='#CCFFFF', command=self.toGame)
         self.imageChr1 = ImageTk.PhotoImage(file=player[0].choose)
         self.btnChr1 = tk.Button(self, image=self.imageChr1, command=partial(self.clickBtnChr, 0), height=140, width=148)
         self.imageChr2 = ImageTk.PhotoImage(file=player[1].choose)
@@ -521,18 +521,18 @@ class Action(tk.Frame):
         # 背景
         self.background = tk.Canvas(self, height=600, width=800, bg='white').pack()
         # 文字
-        self.output = tk.Text(self, width=60, height=14, font=f4, bg='#D3A4FF')
+        self.output = tk.Text(self, width=60, height=14, font=f4, bg='#FFCC99')
         self.output.place(x=35, y=300)
         # 按鈕
-        self.back = tk.Button(self, text="返回", height=1, width=5, bg='#00E3E3', font=('KaiTi', 30), command=self.toGame).place(x=10, y=0)
-        self.a = tk.Button(self, text="跳舞", height=1, width=10, font=f3, bg='#228922', anchor='w', command=partial(self.actiontext, '跳舞')).place(x=35, y=120)
-        self.b = tk.Button(self, text="改裝車子", height=1, width=10, font=f3, bg='#228922', anchor='w', command=partial(self.actiontext, '改裝車子')).place(x=220, y=120)
-        self.c = tk.Button(self, text="吃炸雞", height=1, width=10, font=f3, bg='#228922', anchor='w', command=partial(self.actiontext, '吃炸雞')).place(x=405, y=120)
-        self.d = tk.Button(self, text="車禍", height=1, width=10, font=f3, bg='#228922', anchor='w', command=partial(self.actiontext, '車禍')).place(x=590, y=120)
-        self.e = tk.Button(self, text="約浪漫", height=1, width=10, font=f3, bg='#228922', anchor='w', command=partial(self.actiontext, '約浪漫')).place(x=35, y=220)
-        self.f = tk.Button(self, text="放手騎車", height=1, width=10, font=f3, bg='#228922', anchor='w', command=partial(self.actiontext, '放手騎車')).place(x=220, y=220)
-        self.g = tk.Button(self, text="穿海灘褲", height=1, width=10, font=f3, bg='#228922', anchor='w', command=partial(self.actiontext, '穿海灘褲')).place(x=405, y=220)
-        self.h = tk.Button(self, text="抓頭", height=1, width=10, font=f3, bg='#228922', anchor='w', command=partial(self.actiontext, '抓頭')).place(x=590, y=220)
+        self.back = tk.Button(self, text="返回", height=1, width=5, bg='#CCFFFF', font=('KaiTi', 30), command=self.toGame).place(x=10, y=0)
+        self.a = tk.Button(self, text="跳舞", height=1, width=10, font=f3, bg='#FFFF99', anchor='w', command=partial(self.actiontext, '跳舞')).place(x=35, y=120)
+        self.b = tk.Button(self, text="改裝車子", height=1, width=10, font=f3, bg='#FFFF99', anchor='w', command=partial(self.actiontext, '改裝車子')).place(x=220, y=120)
+        self.c = tk.Button(self, text="吃炸雞", height=1, width=10, font=f3, bg='#FFFF99', anchor='w', command=partial(self.actiontext, '吃炸雞')).place(x=405, y=120)
+        self.d = tk.Button(self, text="車禍", height=1, width=10, font=f3, bg='#FFFF99', anchor='w', command=partial(self.actiontext, '車禍')).place(x=590, y=120)
+        self.e = tk.Button(self, text="約浪漫", height=1, width=10, font=f3, bg='#FFFF99', anchor='w', command=partial(self.actiontext, '約浪漫')).place(x=35, y=220)
+        self.f = tk.Button(self, text="放手騎車", height=1, width=10, font=f3, bg='#FFFF99', anchor='w', command=partial(self.actiontext, '放手騎車')).place(x=220, y=220)
+        self.g = tk.Button(self, text="穿海灘褲", height=1, width=10, font=f3, bg='#FFFF99', anchor='w', command=partial(self.actiontext, '穿海灘褲')).place(x=405, y=220)
+        self.h = tk.Button(self, text="抓頭", height=1, width=10, font=f3, bg='#FFFF99', anchor='w', command=partial(self.actiontext, '抓頭')).place(x=590, y=220)
         # 標題
         self.title = tk.Label(self, text="行動", height=1, width=10, bg='white', font=f1).place(x=600, y=25)
         # CD
@@ -682,7 +682,7 @@ class Boss(tk.Frame):
         self.b_miss.grid(row=8, column=3)
 
         fSize3 = tkFont.Font(size=20)
-        self.btnBack = tk.Button(self, text="返回", height=2, width=8, bg='#00E3E3', font=fSize3, command=self.toLevel)  # 暫定返回鍵
+        self.btnBack = tk.Button(self, text="返回", height=2, width=8, bg='#CCFFFF', font=fSize3, command=self.toLevel)  # 暫定返回鍵
         self.btnBack.grid(row=0, column=0, sticky=tk.NW)
 
         self.btnFight = tk.Button(self, text="戰  鬥", height=1, width=10, font=fSize1, bg='#FF6666', command=self.toFight)  # 暫定戰鬥鍵
@@ -720,7 +720,7 @@ class Fight(tk.Frame):
         # 文字
         self.output = tk.Text(self, width=46, height=14, font=f4, bg='#D3A4FF')
         self.output.place(x=30, y=50)
-        self.btnEnd = tk.Button(self, text="結束", height=2, width=8, bg='#aa1169', font=fSize2, command=self.toLevel)  # 暫定結束鍵
+        self.btnEnd = tk.Button(self, text="結束", height=2, width=8, bg='#FFFF00', font=fSize2, command=self.toLevel)  # 暫定結束鍵
         self.btnEnd.place(x=340, y=500)
 
     def toLevel(self):
