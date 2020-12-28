@@ -102,7 +102,7 @@ def Battle(Player, Fighter, b_index):
             text += ('戰鬥結束，' + Fighter.name + '倒下了\n')
             if b_index in level_list:  # 掉落角色
                 a = random.randint(0, 99)
-                if a <= 5:
+                if a <= 50:
                     if b_index == 0:
                         drop = 4
                     elif b_index == 1:
@@ -548,7 +548,7 @@ class Action(tk.Frame):
             self.cooldown(8)
             if len(catch_list) > 0:  # 行動獲得角色
                 a = random.randint(0, 99)
-                if a <= 8:
+                if a <= 50:
                     if act == '跳舞':
                         Chr_Obatin(1)
                     elif act == '改裝車子':
